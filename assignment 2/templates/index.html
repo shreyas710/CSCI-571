@@ -11,12 +11,12 @@
         <h2 class="heading-text">Artist Search</h2>
     </header>
     <main>
-        <form method="POST">
+        <form method="POST" onsubmit="validateForm(event)">
             <div class="search-container" id="search-container">
                 <button type="submit" class="search-button">
                     <img src="{{ url_for('static', filename='images/search_icon.png') }}" alt="Search Icon">
                 </button>
-                <input type="text" id="search-bar" class="search-bar" placeholder="Please enter an artist name."/>
+                <input name="artist" type="text" id="search-bar" class="search-bar" placeholder="Please enter an artist name."/>
                 <button type="submit" class="clear-button">
                     <img src="{{ url_for('static', filename='images/clear_icon.png') }}" alt="Clear Icon">
                 </button>

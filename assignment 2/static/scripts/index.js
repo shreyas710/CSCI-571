@@ -1,5 +1,6 @@
+const inputElement = document.getElementById("search-container")
+
 window.addEventListener("click", (e) => {
-    const inputElement = document.getElementById("search-container")
     if (inputElement.contains(e.target)) {
         inputElement.classList.add('search-container-active');
     } else {
@@ -7,4 +8,7 @@ window.addEventListener("click", (e) => {
     }
 })
 
+function validateForm(e) {
+    e.preventDefault()
+}
 
