@@ -1,11 +1,14 @@
 from flask import Flask, render_template, request
 import requests
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 app = Flask(__name__)
 
-CLIENT_ID = "ad7cd3662dd364ae367c"
-CLIENT_SECRET = "cef9c262e44fe4d64e0c581b952bc9fc"
-BASE_UTL = "https://api.artsy.net/api"
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+BASE_URL = os.getenv("BASE_URL")
 
 @app.route('/', methods=['GET'])
 def initialize():
