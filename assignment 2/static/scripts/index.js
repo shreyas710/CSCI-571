@@ -8,7 +8,3 @@ window.addEventListener("click", (e) => {
     }
 })
 
-function validateForm(e) {
-    e.preventDefault()
-}
-

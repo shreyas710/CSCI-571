@@ -9,19 +9,32 @@
 <body>
     <header>
         <h2 class="heading-text">Artist Search</h2>
+        {% if artist %}
+        {{ artist }}
+        {% endif %}
     </header>
     <main>
-        <form method="POST" onsubmit="validateForm(event)">
+        <form method="POST">
             <div class="search-container" id="search-container">
                 <button type="submit" class="search-button">
                     <img src="{{ url_for('static', filename='images/search_icon.png') }}" alt="Search Icon">
                 </button>
-                <input name="artist" type="text" id="search-bar" class="search-bar" placeholder="Please enter an artist name."/>
+                <input name="artist" value="{{name}}" type="text" id="search-bar" class="search-bar" placeholder="Please enter an artist name."/>
                 <button type="submit" class="clear-button">
                     <img src="{{ url_for('static', filename='images/clear_icon.png') }}" alt="Clear Icon">
                 </button>
             </div>
         </form>
+
+        {% if artists %}
+        {% for artist in artists %}
+        <div class="artist-container" id="artist-container">
+            <form action="/artist/{{artist._links.self.href.split('/')[-1]}}" method="GET">
+                <button class="artist-button" id="artist-button" onsubmit="">{{ artist.title }}</button>
+            </form>
+        </div>
+        {% endfor %}
+        {% endif %}
     </main>
     <footer>
         <p class="footer-text">
@@ -31,8 +44,6 @@
         </p>
     </footer>
 
-    <script src="{{ url_for('static', filename='scripts/index.js') }}">
-
-    </script>
+    <script src="{{ url_for('static', filename='scripts/index.js') }}"></script>
 </body>
 </html>

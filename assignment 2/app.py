@@ -20,8 +20,11 @@ def get_token():
 
 def get_artists(artist):
     r = requests.get(BASE_URL + '/search?q=' + artist + '&size=10&type=artist', headers={'X-XAPP-Token': cache['token']})
-    cache['results'] = json.loads(r.text)['_embedded']['results']
-    return cache['results']
+    cache['artists'] = json.loads(r.text)['_embedded']['results']
+
+def get_selected_artist(artist_id):
+    r = requests.get(BASE_URL + '/artists/' + artist_id, headers={'X-XAPP-Token': cache['token']})
+    cache['selected_artist'] = json.loads(r.text)
 
 @app.route('/', methods=['GET', 'POST'])
 def initialize():
@@ -31,16 +34,12 @@ def initialize():
     elif request.method == 'POST':
         if 'token' not in cache:
             get_token()
-        data = get_artists(request.form['artist'])
-        print(data)
-        return render_template('index.html', artists=data)
+        get_artists(request.form['artist'])
+        return render_template('index.html', artists=cache['artists'])
 
-# @app.route('/', methods=['POST'])
-# def normal_search():
-#     print('normal search called')
-#     data = request.form['artist']
-#     print(data)
-#     # if 'token' not in cache:
-#     #     get_token()
-#     # r = requests.get(BASE_URL + '/search?q=' + artist + '&size=10&type=artist', headers={'X-XAPP-Token': cache['token']})
-#     return render_template('index.html')
+@app.route('/artist/<artist_id>', methods=['GET'])
+def get_artist(artist_id):
+    if 'token' not in cache:
+        get_token()
+    get_selected_artist(artist_id)
+    return render_template('index.html', artists=cache['artists'], artist=cache['selected_artist'])
