@@ -17,7 +17,7 @@
                     <img src="images/search_icon.png" alt="Search Icon">
                 </button>
             </form>
-            <input name="artist" type="text" id="search-bar" class="search-bar" placeholder="Please enter an artist name."/>
+            <input required name="artist" type="text" id="search-bar" class="search-bar" placeholder="Please enter an artist name."/>
             <button type="submit" class="clear-button" onclick="clearSearch()">
                 <img src="images/clear_icon.png" alt="Clear Icon">
             </button>
@@ -32,9 +32,10 @@
 </main>
 <footer>
     <p class="footer-text">
-        Powered by
-        <img src="images/artsy_logo.svg" alt="Artsy Logo" class="artsy-logo"/>
-        <a class="artsy-link" href="https://www.artsy.net">Artsy.</a>
+        <a class="artsy-link" href="https://www.artsy.net">
+            Powered by
+            <img src="images/artsy_logo.svg" alt="Artsy Logo" class="artsy-logo"/>
+            Artsy.</a>
     </p>
 </footer>
 

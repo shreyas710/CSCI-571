@@ -46,6 +46,18 @@ async def get_artists(name) -> List[dict]:
     except requests.exceptions.RequestException as e:
         raise HTTPException(status_code=500, detail="Failed to fetch artists from Artsy API")
 
+async def get_particular_artist(artist_id) -> dict:
+    if not cache.get('token'):
+        await get_token()
+
+    try:
+        response = requests.get(BASE_URL + '/artists/' + artist_id, headers={'X-XAPP-Token': cache['token']})
+        data = response.json()
+        artist = data
+        return artist
+    except requests.exceptions.RequestException as e:
+        raise HTTPException(status_code=500, detail="Failed to fetch particular artist from Artsy API")
+
 @app.get("/get_artsy_token")
 async def get_artsy_token():
     try:
@@ -62,6 +74,17 @@ async def search_artist(name: str):
 
         artists = await get_artists(name)
         return artists
+    except HTTPException as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/get_artist/{artist_id}")
+async def get_artist(artist_id: str):
+    try:
+        if not artist_id:
+            raise HTTPException(status_code=400, detail="Artist id cannot be empty")
+
+        artist = await get_particular_artist(artist_id)
+        return artist
     except HTTPException as e:
         raise HTTPException(status_code=500, detail=str(e))
 

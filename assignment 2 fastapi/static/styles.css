@@ -51,7 +51,7 @@ footer {
     position: relative;
     border: 1px solid rgba(1, 1, 1, 0.5);
     text-align: center;
-    border-radius: 50px;
+    border-radius: 15px;
     padding-top: 10px;
     padding-bottom: 10px;
     margin-top: 50px;
@@ -60,7 +60,7 @@ footer {
 }
 
 .search-container-active {
-    border: 1px solid rgba(1, 1, 1, 1);
+    border: 1px solid orange;
 }
 
 .search-icon {
@@ -207,4 +207,39 @@ footer {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+.no-results {
+    width: 45%;
+    text-align: center;
+    background-color: rgb(207,207,207);
+    margin: auto;
+    height: 40px;
+    border-radius: 15px;
+    font-size: 18px;
+    font-weight: 400;
+    padding-top: 20px;
+}
+
+.loading-container {
+    text-align: center;
+}
+
+.loading-gif {
+    width: 100px;
+    height: 100px;
+}
+
+.artist-id {
+    display: none;
+}
+
+.artist-description-container {
+    margin-top: 20px;
+}
+
+.artist-description-name {
+    text-align: center;
+    font-size: 35px;
+    font-weight: lighter;
 }
