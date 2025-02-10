@@ -9,6 +9,10 @@ header {
     background-color: rgb(237, 237, 237);
 }
 
+.container {
+    min-height: 100vh;
+}
+
 .heading-text {
     margin-top: 0;
     margin-bottom: 0;
@@ -235,11 +239,24 @@ footer {
 }
 
 .artist-description-container {
-    margin-top: 20px;
+    margin: auto;
+    width: 1200px;
+    text-align: center;
 }
 
 .artist-description-name {
     text-align: center;
-    font-size: 35px;
+    font-size: 30px;
     font-weight: lighter;
+}
+
+.artist-description-location {
+    font-size: 25px;
+    font-weight: lighter;
+}
+
+.artist-description-biography {
+    font-size: 20px;
+    margin: 0 auto;
+    text-align: justify;
 }

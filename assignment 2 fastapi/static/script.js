@@ -21,6 +21,8 @@ artistContainer.addEventListener("click", async (e) => {
 
 function clearSearch() {
     searchInput.value = "";
+    artistContainer.innerHTML = "";
+    artistDescriptionContainer.innerHTML = "";
     searchInput.focus();
 }
 
@@ -147,10 +149,21 @@ async function search(e) {
 }
 
 function showArtistCard(artist) {
+    const card = document.createElement('div');
+    card.className = 'artist-description-card';
     const name = document.createElement('div');
     name.className = 'artist-description-name';
     name.textContent = artist["name"] + " (" + artist["birthday"] + " - " + artist["deathday"] + ")";
-    return name;
+    const location = document.createElement('div');
+    location.className = 'artist-description-location';
+    location.textContent = artist["nationality"];
+    const biography = document.createElement('div');
+    biography.className = 'artist-description-biography';
+    biography.textContent = artist["biography"];
+    card.appendChild(name);
+    card.appendChild(location);
+    card.appendChild(biography);
+    return card;
 }
 
 async function getArtist(artistId) {
@@ -180,7 +193,6 @@ async function getArtist(artistId) {
             artistDescriptionContainer.appendChild(name);
             return;
         }
-
         const card = showArtistCard(data);
         artistDescriptionContainer.appendChild(card);
     } catch (error) {

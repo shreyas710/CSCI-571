@@ -7,9 +7,11 @@
     <title>Assignment 2</title>
 </head>
 <body>
+<div class="container">
 <header>
     <h2 class="heading-text">Artist Search</h2>
 </header>
+
 <main>
         <div class="search-container" id="search-container">
             <form id="search-form" onsubmit="search(event)">
@@ -22,14 +24,12 @@
                 <img src="images/clear_icon.png" alt="Clear Icon">
             </button>
         </div>
-        <div class="artist-container" id="artist-container">
-<!--      display all artists      -->
-        </div>
 
-    <div class="artist-description-container" id="artist-description-container">
-<!--    selected artist description    -->
-    </div>
+        <div class="artist-container" id="artist-container"></div>
+
+        <div class="artist-description-container" id="artist-description-container"></div>
 </main>
+
 <footer>
     <p class="footer-text">
         <a class="artsy-link" href="https://www.artsy.net">
@@ -38,7 +38,7 @@
             Artsy.</a>
     </p>
 </footer>
-
+</div>
 <script src="script.js"></script>
 </body>
 </html>
