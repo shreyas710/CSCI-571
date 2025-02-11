@@ -25,7 +25,7 @@ header {
 footer {
     width: 100%;
     background-color: rgb(19, 38, 52);
-    position: absolute;
+    position: fixed;
     bottom: 0;
 }
 
@@ -163,9 +163,9 @@ footer {
 }
 
 .artist-container {
-    max-height: 410px;
+    max-height: 390px;
     margin: 50px 100px 0 100px;
-    padding-bottom: 24px;
+    padding-bottom: 10px;
     white-space: nowrap;
     overflow-y: hidden;
     overflow-x: scroll;
@@ -173,8 +173,8 @@ footer {
 
 .artist-card {
     margin: 10px;
-    width: 13%;
-    height: 400px;
+    width: 300px;
+    height: 380px;
     display: inline-block;
     background-color: rgb(35, 67, 98);
     overflow: auto;
@@ -186,8 +186,8 @@ footer {
 }
 
 .artist-image-container {
-    width: 270px;
-    height: 270px;
+    width: 250px;
+    height: 250px;
     margin: 16px auto 0;
     border-radius: 50%;
     border: 10px solid white;
@@ -209,8 +209,7 @@ footer {
     color: white;
     font-weight: 400;
     overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    white-space: pre-wrap;
 }
 
 .no-results {
@@ -239,8 +238,9 @@ footer {
 }
 
 .artist-description-container {
+    padding-top: 10px;
     margin: auto;
-    width: 1200px;
+    width: 50%;
     text-align: center;
 }
 
@@ -257,6 +257,6 @@ footer {
 
 .artist-description-biography {
     font-size: 20px;
-    margin: 0 auto;
+    margin: 0 auto 50px auto;
     text-align: justify;
 }

@@ -2,6 +2,7 @@ const inputElement = document.getElementById("search-container")
 const searchInput = document.getElementById("search-bar")
 const artistContainer = document.getElementById("artist-container")
 const artistDescriptionContainer = document.getElementById("artist-description-container")
+const allCards = document.getElementsByClassName("artist-card");
 
 window.addEventListener("click", (e) => {
     if (inputElement.contains(e.target)) {
@@ -13,7 +14,12 @@ window.addEventListener("click", (e) => {
 
 artistContainer.addEventListener("click", async (e) => {
     const card = e.target.closest(".artist-card");
+    for (let i = 0; i < allCards.length; i++) {
+        const currentCard = allCards[i];
+        currentCard.style.backgroundColor = "rgb(35, 67, 98)";
+    }
     if (card) {
+        card.style.backgroundColor = "rgb(27, 38, 48)";
         const artistId = card.querySelector('.artist-id').textContent;
         await getArtist(artistId);
     }
