@@ -117,13 +117,18 @@ function showLoading(containerElement) {
 
 async function search(e) {
     e.preventDefault()
+    artistDescriptionContainer.innerHTML = '';
     try {
         if (!searchInput.value.trim()) {
             searchInput.reportValidity();
             return;
         }
 
-        showLoading(artistContainer);
+        if (artistContainer.innerHTML !== '') {
+            showLoading(artistDescriptionContainer);
+        } else {
+            showLoading(artistContainer);
+        }
 
         const searchResponse = await fetch(`http://localhost:8000/search_artist/` + searchInput.value, {
             method: 'GET',
@@ -135,8 +140,8 @@ async function search(e) {
             console.error(`HTTP error! status: ${searchResponse.status}`);
         }
         const data = await searchResponse.json();
+        artistDescriptionContainer.innerHTML = '';
         artistContainer.innerHTML = '';
-
         if (data.length === 0) {
             const name = document.createElement("div")
             name.className = 'no-results'

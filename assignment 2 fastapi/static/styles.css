@@ -165,7 +165,7 @@ footer {
 .artist-container {
     max-height: 390px;
     margin: 50px 100px 0 100px;
-    padding-bottom: 10px;
+    padding-bottom: 15px;
     white-space: nowrap;
     overflow-y: hidden;
     overflow-x: scroll;
