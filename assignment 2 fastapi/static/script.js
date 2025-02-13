@@ -50,7 +50,7 @@ setInterval(getArtsyToken, 600000)
 
 async function getArtsyToken() {
     try {
-        const response = await fetch(`http://localhost:8000/get_artsy_token`, {
+        const response = await fetch(`https://shreyas710-csci571-assignment2.wl.r.appspot.com/get_artsy_token`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -130,7 +130,7 @@ async function search(e) {
             showLoading(artistContainer);
         }
 
-        const searchResponse = await fetch(`http://localhost:8000/search_artist/` + searchInput.value, {
+        const searchResponse = await fetch(`https://shreyas710-csci571-assignment2.wl.r.appspot.com/search_artist/` + searchInput.value, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -185,7 +185,7 @@ async function getArtist(artistId) {
 
         showLoading(artistDescriptionContainer);
 
-        const artistResponse = await fetch(`http://localhost:8000/get_artist/${artistId}`, {
+        const artistResponse = await fetch(`https://shreyas710-csci571-assignment2.wl.r.appspot.com/get_artist/${artistId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

@@ -1,7 +1,6 @@
 from typing import Union, List
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
 import requests
@@ -16,14 +15,6 @@ cache = {}
 
 app = FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Specify your frontend domain in production
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 async def get_token():
     try:
         response = requests.post(BASE_URL + '/tokens/xapp_token?client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET)
@@ -31,7 +22,6 @@ async def get_token():
         cache['token'] = data['token']
     except requests.exceptions.RequestException as e:
         raise HTTPException(status_code=500, detail="Failed to authenticate with Artsy API")
-
 
 async def get_artists(name) -> List[dict]:
     if not cache.get('token'):
@@ -88,4 +78,8 @@ async def get_artist(artist_id: str):
     except HTTPException as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-app.mount("/", StaticFiles(directory="static",html = True), name="static")
+@app.get("/")
+async def root():
+    return {"message": "Backend Working"}
+
+app.mount("/frontend", StaticFiles(directory="static",html = True), name="static")
