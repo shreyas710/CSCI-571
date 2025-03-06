@@ -19,6 +19,7 @@ async function getArtsyToken() {
     }
 }
 
+// generate token
 router.get('/', async (req, res) => {
     try {
         await getArtsyToken();
@@ -28,6 +29,7 @@ router.get('/', async (req, res) => {
     }
 });
 
+// search for artists
 router.get('/search_artist/:name', async (req, res) => {
     try {
         if (token === undefined) {
@@ -49,6 +51,7 @@ router.get('/search_artist/:name', async (req, res) => {
     }
 });
 
+// get artist by id
 router.get('/get_artist/:id', async (req, res) => {
     try {
         if (token === undefined) {
@@ -66,6 +69,50 @@ router.get('/get_artist/:id', async (req, res) => {
         artist = response.data;
         res.json(artist);
     }  catch (error) {
+        console.error(error);
+    }
+});
+
+// get artworks for artist
+router.get('/get_artist_artworks/:id', async (req, res) => {
+    try {
+        if (token === undefined) {
+            await getArtsyToken();
+        }
+        const id = req.params.id;
+        if (id === undefined) {
+            res.json({ "message": "Please provide an id" });
+        }
+        const response = await axios.get(BASE_URL + '/artworks?artist_id=' + id + '&size=10', {
+            headers: {
+                'X-Xapp-Token': token
+            }
+        });
+        artist = response.data['_embedded']['artworks'];
+        res.json(artist);
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+// get genes for artist
+router.get('/get_artist_genes/:id', async (req, res) => {
+    try {
+        if (token === undefined) {
+            await getArtsyToken();
+        }
+        const id = req.params.id;
+        if (id === undefined) {
+            res.json({ "message": "Please provide an id" });
+        }
+        const response = await axios.get(BASE_URL + '/genes?artist_id=' + id, {
+            headers: {
+                'X-Xapp-Token': token
+            }
+        });
+        artist = response.data['_embedded']['genes'];
+        res.json(artist);
+    } catch (error) {
         console.error(error);
     }
 });
