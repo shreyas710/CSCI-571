@@ -4,12 +4,15 @@
   "description": "artsy backend apis",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "build": "cd frontend && npm install && npm run build"
   },
   "author": "shreyas",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.2"
+    "axios": "^1.8.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "nodemon": "^3.1.9"
   }
 }
