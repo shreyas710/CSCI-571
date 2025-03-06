@@ -1,5 +1,5 @@
 function App() {
-  return <>hello shreyas!</>;
+  return <>Hello World. Deployed Frontend on Gcloud!</>;
 }
 
 export default App;
