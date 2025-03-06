@@ -10,7 +10,6 @@
   "author": "shreyas",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.2",
-    "nodemon": "^3.1.9"
+    "express": "^4.21.2"
   }
 }
