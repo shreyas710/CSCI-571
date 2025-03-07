@@ -1,15 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
-const sessionMiddleware = require('../../middlewares/session-middleware');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 BASE_URL = process.env.BASE_URL;
 CLIENT_ID = process.env.CLIENT_ID;
 CLIENT_SECRET = process.env.CLIENT_SECRET;
 
+router.use(cookieParser());
+
 async function getArtsyToken() {
     try {
+        console.log("Generating token");
         const response = await axios.post(BASE_URL + '/tokens/xapp_token?client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET);
         return response.data.token
     } catch (error) {
@@ -17,32 +20,11 @@ async function getArtsyToken() {
     }
 }
 
-// middleware to check if token is present and generate if not
-router.use(sessionMiddleware);
-router.use(async (req, res, next) => {
-    if (req.session.token === undefined) {
-        console.log("Token not present, generating token");
-        req.session.token = await getArtsyToken();
-        next();
-    } else {
-        next();
-    }
-});
-
-// generate token
-router.get('/', async (req, res) => {
-    try {
-        req.session.token = await getArtsyToken();
-        res.json({ "message": "Token generated" });
-    } catch (error) {
-        console.error(error);
-    }
-});
-
 // search for artists
 router.get('/search_artist/:name', async (req, res) => {
     try {
-        if (req.session.token === undefined) {
+        const token = req.cookies.token;
+        if (token === undefined) {
             res.json({ "message": "Please generate a token first" });
         }
         const name = req.params.name;
@@ -51,7 +33,7 @@ router.get('/search_artist/:name', async (req, res) => {
         }
         const response = await axios.get(BASE_URL + '/search?q=' + name + '&size=10&type=artist', {
             headers: {
-                'X-Xapp-Token': req.session.token
+                'X-Xapp-Token': token
             }
         });
         artists = response.data['_embedded']['results']
@@ -64,7 +46,8 @@ router.get('/search_artist/:name', async (req, res) => {
 // get artist by id
 router.get('/get_artist/:id', async (req, res) => {
     try {
-        if (req.session.token === undefined) {
+        const token = req.cookies.token;
+        if (token === undefined) {
             res.json({ "message": "Please generate a token first" });
         }
         const id = req.params.id;
@@ -73,7 +56,7 @@ router.get('/get_artist/:id', async (req, res) => {
         }
         const response = await axios.get(BASE_URL + '/artists/' + id, {
             headers: {
-                'X-Xapp-Token': req.session.token
+                'X-Xapp-Token': token
             }
         });
         artist = response.data;
@@ -86,7 +69,8 @@ router.get('/get_artist/:id', async (req, res) => {
 // get artworks for artist
 router.get('/get_artist_artworks/:id', async (req, res) => {
     try {
-        if (req.session.token === undefined) {
+        const token = req.cookies.token;
+        if (token === undefined) {
             res.json({ "message": "Please generate a token first" });
         }
         const id = req.params.id;
@@ -95,7 +79,7 @@ router.get('/get_artist_artworks/:id', async (req, res) => {
         }
         const response = await axios.get(BASE_URL + '/artworks?artist_id=' + id + '&size=10', {
             headers: {
-                'X-Xapp-Token': req.session.token
+                'X-Xapp-Token': token
             }
         });
         artist = response.data['_embedded']['artworks'];
@@ -108,7 +92,8 @@ router.get('/get_artist_artworks/:id', async (req, res) => {
 // get genes for artist
 router.get('/get_artist_genes/:id', async (req, res) => {
     try {
-        if (req.session.token === undefined) {
+        const token = req.cookies.token;
+        if (token === undefined) {
             res.send({ "message": "Please generate a token first" });
         }
         const id = req.params.id;
@@ -117,11 +102,22 @@ router.get('/get_artist_genes/:id', async (req, res) => {
         }
         const response = await axios.get(BASE_URL + '/genes?artist_id=' + id, {
             headers: {
-                'X-Xapp-Token': req.session.token
+                'X-Xapp-Token': token
             }
         });
         artist = response.data['_embedded']['genes'];
         res.json(artist);
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+// generate token
+router.get('/', async (req, res) => {
+    try {
+        var newDate = new Date(new Date().getTime() + 86400000);
+        res.cookie('token', await getArtsyToken(), { expires: newDate });
+        res.json({ "message": "Token generated" });
     } catch (error) {
         console.error(error);
     }
