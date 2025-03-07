@@ -4,7 +4,7 @@
   "description": "artsy backend apis",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "npm run build && nodemon index.js",
     "build": "cd frontend && npm install && npm run build"
   },
   "author": "shreyas",

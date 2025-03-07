@@ -17,7 +17,7 @@ async function getArtsyToken() {
     }
 }
 
-// middleware to check if token is present
+// middleware to check if token is present and generate if not
 router.use(sessionMiddleware);
 router.use(async (req, res, next) => {
     if (req.session.token === undefined) {
