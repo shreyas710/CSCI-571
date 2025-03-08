@@ -15,8 +15,7 @@ export default function Home() {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const json = await response.json();
-        console.log(json);
+        await response.json();
       } catch (e) {
         console.error(e);
       } finally {
