@@ -9,7 +9,6 @@ export default function Login() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Login attempt with:", { email, password });
-    // Add your authentication logic here
   };
 
   return (
