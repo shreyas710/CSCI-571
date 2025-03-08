@@ -57,7 +57,7 @@ export default function Register() {
               type='submit'
               className='w-100 py-2'
               style={{ backgroundColor: "#5883b0" }}>
-              Log in
+              Register
             </Button>
           </Form>
         </Card.Body>
