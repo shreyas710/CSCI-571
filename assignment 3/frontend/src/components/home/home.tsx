@@ -1,6 +1,8 @@
 import { Spinner, Button, Container, Form } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import Artist from "../../types/artist";
+import ArtistCard from "../artistCard/artistCard";
+import artsyLogo from "../../assets/images/artsy_logo.svg";
 
 export default function Home() {
   const [search, setSearch] = useState<string>("");
@@ -77,11 +79,14 @@ export default function Home() {
       {artists.length > 0 && (
         <div className='mt-5'>
           <h3>Artists</h3>
-          <ul>
-            {artists.map((artist, index) => (
-              <li key={index}>{artist.title!}</li>
-            ))}
-          </ul>
+          {artists.map((artist, index) => (
+            <ArtistCard
+              key={index}
+              image={artist._links.thumbnail.href.includes(
+                "missing_image.png") ? artsyLogo : artist._links.thumbnail.href}
+              text={artist.title}
+            />
+          ))}
         </div>
       )}
     </Container>
