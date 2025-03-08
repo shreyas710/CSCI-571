@@ -47,7 +47,7 @@ export default function Home() {
     <Container className='text-center'>
       <Form>
         <Form.Group
-          className='mb-3 mt-5 w-75 d-inline-flex'
+          className='mt-5 w-100 d-inline-flex'
           controlId='exampleForm.ControlInput1'>
           <Form.Control
             type='text'
@@ -77,18 +77,18 @@ export default function Home() {
       </Form>
 
       {artists.length > 0 && (
-        <div className='mt-5'>
-          <h3>Artists</h3>
+        <div className='mt-3 overflow-auto' style={{ whiteSpace: "nowrap" }}>
           {artists.map((artist, index) => (
-            <ArtistCard
-              key={index}
-              image={
-                artist._links.thumbnail.href.includes("missing_image.png")
-                  ? artsyLogo
-                  : artist._links.thumbnail.href
-              }
-              text={artist.title}
-            />
+            <div key={index} className='d-inline-block me-3'>
+              <ArtistCard
+                image={
+                  artist._links.thumbnail.href.includes("missing_image.png")
+                    ? artsyLogo
+                    : artist._links.thumbnail.href
+                }
+                text={artist.title}
+              />
+            </div>
           ))}
         </div>
       )}
