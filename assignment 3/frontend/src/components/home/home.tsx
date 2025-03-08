@@ -1,18 +1,45 @@
 import { Spinner, Button, Container, Form } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Artist from "../../types/artist";
 
 export default function Home() {
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
+  const [artists, setArtists] = useState<Artist[]>([]);
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const response = await fetch("/api/artsy");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const json = await response.json();
+        console.log(json);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchToken();
+  }, []);
+
   async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
-    console.log(search);
     setLoading(true);
-    setTimeout(() => {
+
+    try {
+      const response = await fetch(`/api/artsy/search_artist/${search}`);
+      const data = await response.json();
+      setArtists(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
       setLoading(false);
     }
-    , 2000);
   }
 
   return (
@@ -35,7 +62,7 @@ export default function Home() {
             onClick={(e) => handleSubmit(e)}>
             <span style={{ display: "flex", alignItems: "center" }}>
               Submit
-              {loading && <Spinner size='sm' className="ms-2" />}
+              {loading && <Spinner size='sm' className='ms-2' />}
             </span>
           </Button>
           <Button
@@ -47,6 +74,17 @@ export default function Home() {
           </Button>
         </Form.Group>
       </Form>
+
+      {artists.length > 0 && (
+        <div className='mt-5'>
+          <h3>Artists</h3>
+          <ul>
+            {artists.map((artist, index) => (
+              <li key={index}>{artist.title!}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </Container>
   );
 }
