@@ -1,12 +1,18 @@
-import { Button, Container, Form } from "react-bootstrap";
+import { Spinner, Button, Container, Form } from "react-bootstrap";
 import { useState } from "react";
 
 export default function Home() {
   const [search, setSearch] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     console.log(search);
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }
+    , 2000);
   }
 
   return (
@@ -25,9 +31,12 @@ export default function Home() {
             variant='primary'
             disabled={search == "" ? true : false}
             type='submit'
-            style={{ borderRadius: 0 }}
+            style={{ borderRadius: 0, backgroundColor: "rgb(0, 66, 133)" }}
             onClick={(e) => handleSubmit(e)}>
-            Submit
+            <span style={{ display: "flex", alignItems: "center" }}>
+              Submit
+              {loading && <Spinner size='sm' className="ms-2" />}
+            </span>
           </Button>
           <Button
             variant='secondary'

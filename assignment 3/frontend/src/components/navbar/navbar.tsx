@@ -20,7 +20,9 @@ export default function NavBar() {
           <Nav navbarScroll>
             <div className='me-4'>
               {selectedTab == "search" ? (
-                <Button>Search</Button>
+                <Button style={{ backgroundColor: "rgb(0, 66, 133)" }}>
+                  Search
+                </Button>
               ) : (
                 <Nav.Link
                   as={Link}
@@ -33,7 +35,9 @@ export default function NavBar() {
             </div>
             <div className='me-4'>
               {selectedTab == "login" ? (
-                <Button>Log in</Button>
+                <Button style={{ backgroundColor: "rgb(0, 66, 133)" }}>
+                  Log in
+                </Button>
               ) : (
                 <Nav.Link
                   as={Link}
@@ -46,7 +50,9 @@ export default function NavBar() {
             </div>
             <div className='me-5'>
               {selectedTab == "register" ? (
-                <Button>Register</Button>
+                <Button style={{ backgroundColor: "rgb(0, 66, 133)" }}>
+                  Register
+                </Button>
               ) : (
                 <Nav.Link
                   as={Link}
