@@ -82,8 +82,11 @@ export default function Home() {
           {artists.map((artist, index) => (
             <ArtistCard
               key={index}
-              image={artist._links.thumbnail.href.includes(
-                "missing_image.png") ? artsyLogo : artist._links.thumbnail.href}
+              image={
+                artist._links.thumbnail.href.includes("missing_image.png")
+                  ? artsyLogo
+                  : artist._links.thumbnail.href
+              }
               text={artist.title}
             />
           ))}

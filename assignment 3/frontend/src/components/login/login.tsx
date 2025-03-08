@@ -1,14 +1,18 @@
 import { Container, Form, Button, Card } from "react-bootstrap";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Login() {
+  const { login } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Login attempt with:", { email, password });
+    login();
   };
 
   return (

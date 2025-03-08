@@ -7,16 +7,19 @@ import Login from "./components/login/login.tsx";
 import Register from "./components/register/register.tsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Footer from "./components/footer/footer.tsx";
+import { AuthProvider } from "./context/AuthContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
-    <NavBar/>
-    <Routes>
-      <Route path='/' element={<Home />} />
-      <Route path='/login' element={<Login />} />
-      <Route path='/register' element={<Register />} />
-      <Route path='*' element={<h1>Not Found</h1>} />
-    </Routes>
-    <Footer />
+    <AuthProvider>
+      <NavBar />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
+        <Route path='*' element={<h1>Not Found</h1>} />
+      </Routes>
+      <Footer />
+    </AuthProvider>
   </BrowserRouter>
 );
