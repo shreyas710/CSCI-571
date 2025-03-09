@@ -61,6 +61,7 @@ export default function Home() {
   async function fetchArtist(artist: Artist) {
     setCard(artist);
     setSelectedArtist(null);
+    setArtworks([]);
     setFetchArtistLoader(true);
     try {
       const response = await fetch(
