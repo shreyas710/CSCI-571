@@ -1,4 +1,4 @@
-import { Spinner, Button, Container, Form } from "react-bootstrap";
+import { Spinner, Button, Container, Form, Nav, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import Artist from "../../types/artist";
 import SelectedArtist from "../../types/selectedArtist";
@@ -7,7 +7,6 @@ import artsyLogo from "../../assets/images/artsy_logo.svg";
 import "./home.css";
 import ArtistDetails from "../artistDetails/artistDetails";
 import Tab from "react-bootstrap/Tab";
-import Tabs from "react-bootstrap/Tabs";
 
 export default function Home() {
   const [search, setSearch] = useState<string>("");
@@ -68,6 +67,7 @@ export default function Home() {
         }`
       );
       const data = await response.json();
+      console.log(data);
       setSelectedArtist(data);
     } catch (error) {
       console.error(error);
@@ -108,7 +108,6 @@ export default function Home() {
           </Button>
         </Form.Group>
       </Form>
-
       {artists.length > 0 && (
         <div
           className='mt-3 overflow-auto home-artist-card'
@@ -131,7 +130,7 @@ export default function Home() {
           ))}
         </div>
       )}
-
+      
       {fetchArtistLoader && (
         <Spinner
           style={{ color: "rgb(1, 68, 134)" }}
@@ -142,14 +141,30 @@ export default function Home() {
       )}
 
       {selectedArtist && (
-        <Tabs defaultActiveKey='info' className='mt-5'>
-          <Tab eventKey='info' title='Artist Info'>
-            <ArtistDetails artist={selectedArtist} />
-          </Tab>
-          <Tab eventKey='artworks' title='Artworks'>
-            <ArtistDetails artist={selectedArtist} />
-          </Tab>
-        </Tabs>
+        <Tab.Container defaultActiveKey='first'>
+          <Row className='mt-3'>
+            <Nav
+              variant='pills'
+              className='flex-row align-items-center justify-content-evenly w-100 p-0'>
+              <Nav.Item style={{ width: "49%" }}>
+                <Nav.Link eventKey='first'>Artist Info</Nav.Link>
+              </Nav.Item>
+              <Nav.Item style={{ width: "49%" }}>
+                <Nav.Link eventKey='second'>Artworks</Nav.Link>
+              </Nav.Item>
+            </Nav>
+          </Row>
+          <Row>
+            <Tab.Content>
+              <Tab.Pane eventKey='first'>
+                <ArtistDetails artist={selectedArtist} />
+              </Tab.Pane>
+              <Tab.Pane eventKey='second'>
+                <ArtistDetails artist={selectedArtist} />
+              </Tab.Pane>
+            </Tab.Content>
+          </Row>
+        </Tab.Container>
       )}
     </Container>
   );

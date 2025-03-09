@@ -1,3 +1,8 @@
 .home-artist-card:hover {
     cursor: pointer;
 }
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: var(--bs-nav-pills-link-active-color) !important;
+    background-color: rgb(1, 68, 134) !important;
+}
