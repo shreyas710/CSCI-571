@@ -1,4 +1,4 @@
-import SelectedArtist from "../../types/selectedArtist";
+import SelectedArtist from "../../types/selectedArtistType";
 
 export default function ArtistDetails({ artist }: { artist: SelectedArtist }) {
   return (

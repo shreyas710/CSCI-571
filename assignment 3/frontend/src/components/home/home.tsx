@@ -1,12 +1,14 @@
 import { Spinner, Button, Container, Form, Nav, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import Artist from "../../types/artist";
-import SelectedArtist from "../../types/selectedArtist";
+import Artist from "../../types/artistType";
+import SelectedArtist from "../../types/selectedArtistType";
 import ArtistCard from "../artistCard/artistCard";
 import artsyLogo from "../../assets/images/artsy_logo.svg";
 import "./home.css";
 import ArtistDetails from "../artistDetails/artistDetails";
 import Tab from "react-bootstrap/Tab";
+import Artwork from "../../types/artworkType";
+import ArtistArtworks from "../artistArtworks/artistArtworks";
 
 export default function Home() {
   const [search, setSearch] = useState<string>("");
@@ -18,6 +20,8 @@ export default function Home() {
   const [selectedArtist, setSelectedArtist] = useState<SelectedArtist | null>(
     null
   );
+
+  const [artworks, setArtworks] = useState<Artwork[]>([]);
 
   const [fetchArtistLoader, setFetchArtistLoader] = useState<boolean>(false);
 
@@ -67,12 +71,23 @@ export default function Home() {
         }`
       );
       const data = await response.json();
-      console.log(data);
       setSelectedArtist(data);
     } catch (error) {
       console.error(error);
     } finally {
       setFetchArtistLoader(false);
+    }
+  }
+
+  async function fetchArtworks() {
+    try {
+      const response = await fetch(
+        `/api/artsy/get_artist_artworks/${selectedArtist!.id}`
+      );
+      const data = await response.json();
+      setArtworks(data);
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -108,6 +123,7 @@ export default function Home() {
           </Button>
         </Form.Group>
       </Form>
+
       {artists.length > 0 && (
         <div
           className='mt-3 overflow-auto home-artist-card'
@@ -130,7 +146,7 @@ export default function Home() {
           ))}
         </div>
       )}
-      
+
       {fetchArtistLoader && (
         <Spinner
           style={{ color: "rgb(1, 68, 134)" }}
@@ -150,7 +166,9 @@ export default function Home() {
                 <Nav.Link eventKey='first'>Artist Info</Nav.Link>
               </Nav.Item>
               <Nav.Item style={{ width: "49%" }}>
-                <Nav.Link eventKey='second'>Artworks</Nav.Link>
+                <Nav.Link eventKey='second' onClick={() => fetchArtworks()}>
+                  Artworks
+                </Nav.Link>
               </Nav.Item>
             </Nav>
           </Row>
@@ -160,7 +178,7 @@ export default function Home() {
                 <ArtistDetails artist={selectedArtist} />
               </Tab.Pane>
               <Tab.Pane eventKey='second'>
-                <ArtistDetails artist={selectedArtist} />
+                <ArtistArtworks artworks={artworks} />
               </Tab.Pane>
             </Tab.Content>
           </Row>
