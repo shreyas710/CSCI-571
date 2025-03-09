@@ -61,7 +61,6 @@ export default function Home() {
   async function fetchArtist(artist: Artist) {
     setCard(artist);
     setSelectedArtist(null);
-    setArtworks([]);
     setFetchArtistLoader(true);
     try {
       const response = await fetch(
@@ -81,6 +80,7 @@ export default function Home() {
   }
 
   async function fetchArtworks() {
+    setArtworks([]);
     try {
       const response = await fetch(
         `/api/artsy/get_artist_artworks/${selectedArtist!.id}`
@@ -178,9 +178,11 @@ export default function Home() {
               <Tab.Pane eventKey='first'>
                 <ArtistDetails artist={selectedArtist} />
               </Tab.Pane>
-              <Tab.Pane eventKey='second'>
-                <ArtistArtworks artworks={artworks} />
-              </Tab.Pane>
+              {artworks && (
+                <Tab.Pane eventKey='second'>
+                  <ArtistArtworks artworks={artworks} />
+                </Tab.Pane>
+              )}
             </Tab.Content>
           </Row>
         </Tab.Container>
