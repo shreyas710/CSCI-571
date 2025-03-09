@@ -1,14 +1,26 @@
 import { Spinner, Button, Container, Form } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import Artist from "../../types/artist";
+import SelectedArtist from "../../types/selectedArtist";
 import ArtistCard from "../artistCard/artistCard";
 import artsyLogo from "../../assets/images/artsy_logo.svg";
+import "./home.css";
+import ArtistDetails from "../artistDetails/artistDetails";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
 
 export default function Home() {
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const [artists, setArtists] = useState<Artist[]>([]);
+  const [card, setCard] = useState<Artist | null>(null);
+
+  const [selectedArtist, setSelectedArtist] = useState<SelectedArtist | null>(
+    null
+  );
+
+  const [fetchArtistLoader, setFetchArtistLoader] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -40,6 +52,27 @@ export default function Home() {
       console.error(error);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function fetchArtist(artist: Artist) {
+    setCard(artist);
+    setSelectedArtist(null);
+    setFetchArtistLoader(true);
+    try {
+      const response = await fetch(
+        `/api/artsy/get_artist/${
+          artist._links.self.href.split("/")[
+            artist._links.self.href.split("/").length - 1
+          ]
+        }`
+      );
+      const data = await response.json();
+      setSelectedArtist(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setFetchArtistLoader(false);
     }
   }
 
@@ -77,10 +110,16 @@ export default function Home() {
       </Form>
 
       {artists.length > 0 && (
-        <div className='mt-3 overflow-auto' style={{ whiteSpace: "nowrap" }}>
+        <div
+          className='mt-3 overflow-auto home-artist-card'
+          style={{ whiteSpace: "nowrap" }}>
           {artists.map((artist, index) => (
-            <div key={index} className='d-inline-block me-3'>
+            <div
+              onClick={() => fetchArtist(artist)}
+              key={index}
+              className='d-inline-block me-3'>
               <ArtistCard
+                selected={card === artist}
                 image={
                   artist._links.thumbnail.href.includes("missing_image.png")
                     ? artsyLogo
@@ -91,6 +130,26 @@ export default function Home() {
             </div>
           ))}
         </div>
+      )}
+
+      {fetchArtistLoader && (
+        <Spinner
+          style={{ color: "rgb(1, 68, 134)" }}
+          animation='border'
+          role='status'
+          className='mt-5'
+        />
+      )}
+
+      {selectedArtist && (
+        <Tabs defaultActiveKey='info' className='mt-5'>
+          <Tab eventKey='info' title='Artist Info'>
+            <ArtistDetails artist={selectedArtist} />
+          </Tab>
+          <Tab eventKey='artworks' title='Artworks'>
+            <ArtistDetails artist={selectedArtist} />
+          </Tab>
+        </Tabs>
       )}
     </Container>
   );
