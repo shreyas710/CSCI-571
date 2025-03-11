@@ -22,6 +22,8 @@ export default function Home() {
   );
 
   const [artworks, setArtworks] = useState<Artwork[]>([]);
+  const [fetchArtworksLoader, setFetchArtworksLoader] =
+    useState<boolean>(false);
 
   const [fetchArtistLoader, setFetchArtistLoader] = useState<boolean>(false);
 
@@ -81,14 +83,18 @@ export default function Home() {
 
   async function fetchArtworks() {
     setArtworks([]);
+    setFetchArtworksLoader(true);
     try {
       const response = await fetch(
         `/api/artsy/get_artist_artworks/${selectedArtist!.id}`
       );
       const data = await response.json();
+      console.log(data);
       setArtworks(data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setFetchArtworksLoader(false);
     }
   }
 
@@ -180,7 +186,17 @@ export default function Home() {
               </Tab.Pane>
               {artworks && (
                 <Tab.Pane eventKey='second'>
-                  <ArtistArtworks artworks={artworks} />
+                  {fetchArtworksLoader && (
+                    <Spinner
+                      style={{ color: "rgb(1, 68, 134)" }}
+                      animation='border'
+                      role='status'
+                      className='mt-5'
+                    />
+                  )}
+                  {!fetchArtworksLoader && (
+                    <ArtistArtworks artworks={artworks} />
+                  )}
                 </Tab.Pane>
               )}
             </Tab.Content>
