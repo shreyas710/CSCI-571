@@ -1,15 +1,25 @@
 const User = require('../models/userModel');
 const generateToken = require('../config/jwt');
+const crypto = require('crypto');
+const axios = require('axios');
 
-const allUsers = async (req, res) => {
+// create gravatar for user
+const createGravatar = async (email) => {
     try {
-        const users = await User.find({});
-        res.json(users);
+        const hash = crypto.createHash('sha256').update(email.trim().toLowerCase()).digest('hex');
+
+        const response = await axios.get(`https://api.gravatar.com/v3/profiles/${hash}`, {
+            headers: {
+                Authorization: `Bearer ${process.env.GRAVATAR_KEY}`,
+            },
+        });
+        return response.data.avatar_url;
     } catch (error) {
         console.error(error);
     }
 }
 
+// register a new user
 const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -22,12 +32,14 @@ const registerUser = async (req, res) => {
             res.status(400);
             throw new Error("User already exists");
         }
-        const user = await User.create({ name, email, password });
+        const pic = await createGravatar(email);
+        const user = await User.create({ name, email, password, pic });
         if (user) {
             res.status(201).json({
                 _id: user._id,
                 name: user.name,
                 email: user.email,
+                pic: user.pic,
                 token: generateToken(user._id),
             });
         } else {
@@ -39,6 +51,7 @@ const registerUser = async (req, res) => {
     }
 }
 
+// login a user
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -63,4 +76,4 @@ const loginUser = async (req, res) => {
     }
 }
 
-module.exports = { allUsers, registerUser, loginUser };
+module.exports = { registerUser, loginUser };
