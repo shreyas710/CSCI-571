@@ -32,12 +32,14 @@ const registerUser = async (req, res) => {
         const pic = await createGravatar(email);
         const user = await User.create({ name, email, password, pic });
         if (user) {
+            const userToken = generateToken(user._id);
+            res.cookie('userToken', userToken, { maxAge: 3600000 });
             res.status(201).json({
                 _id: user._id,
                 name: user.name,
                 email: user.email,
                 pic: user.pic,
-                token: generateToken(user._id),
+                token: userToken,
             });
         } else {
             res.status(400);
@@ -54,12 +56,14 @@ const loginUser = async (req, res) => {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
         if (user && (await user.matchPassword(password))) {
+            const userToken = generateToken(user._id);
+            res.cookie('userToken', userToken, { maxAge: 3600000 });
             res.json({
                 _id: user._id,
                 name: user.name,
                 email: user.email,
                 pic: user.pic,
-                token: generateToken(user._id),
+                token: userToken,
             });
         } else {
             res.status(401);
