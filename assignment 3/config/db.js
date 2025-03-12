@@ -2,10 +2,7 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
     try {
-        const conn = await mongoose.connect("mongodb+srv://shreyask:%40Shreyas710%40@cluster0.rltx2xm.mongodb.net/CSCI571_ASSIGNMENT3", {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        const conn = await mongoose.connect("mongodb+srv://shreyask:%40Shreyas710%40@cluster0.rltx2xm.mongodb.net/CSCI571_ASSIGNMENT3");
 
         console.log(`MongoDB Connected: ${conn.connection.host}`);
     } catch (error) {
