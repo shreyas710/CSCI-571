@@ -99,7 +99,7 @@ export default function Home() {
   }
 
   return (
-    <Container className='text-center'>
+    <Container className='text-center' style={{marginBottom: "50px"}}>
       <Form>
         <Form.Group
           className='mt-5 w-100 d-inline-flex'

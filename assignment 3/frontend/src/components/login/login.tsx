@@ -49,7 +49,7 @@ export default function Login() {
   };
 
   return (
-    <Container className='d-flex flex-column align-items-center mt-5'>
+    <Container className='d-flex flex-column align-items-center mt-5' style={{marginBottom: "50px"}}>
       <Card style={{ width: "400px", padding: "20px", marginBottom: "15px" }}>
         <Card.Body>
           <h2 className='mb-4'>Login</h2>

@@ -12,7 +12,7 @@ export default function ArtistDetails({ artist }: { artist: SelectedArtist }) {
 
       <div
         className='mt-3'
-        style={{ margin: "0 auto 50px auto", textAlign: "justify" }}>
+        style={{ margin: "0 auto 0 auto", textAlign: "justify" }}>
         <p className='text-gray-800'>{artist.biography}</p>
       </div>
     </div>
