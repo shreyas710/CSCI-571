@@ -243,7 +243,9 @@ export default function Home() {
             <Nav
               variant='pills'
               className='flex-row align-items-center justify-content-evenly w-100 p-0'>
-              <Nav.Item style={{ width: "49%" }}>
+              <Nav.Item
+                onClick={() => setArtworkAlert(null)}
+                style={{ width: "49%" }}>
                 <Nav.Link eventKey='first'>Artist Info</Nav.Link>
               </Nav.Item>
               <Nav.Item style={{ width: "49%" }}>
