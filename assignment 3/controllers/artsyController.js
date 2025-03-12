@@ -16,9 +16,11 @@ const generateToken = async (req, res) => {
         if (token === undefined) {
             const expirationDate = new Date();
             expirationDate.setDate(expirationDate.getDate() + 7);
-            res.cookie('token', await getArtsyToken(), { expires: expirationDate });
+            res.cookie('token', await getArtsyToken(), { expires: expirationDate, httpOnly: true });
+            console.log("Token generated");
             res.json({ "message": "Token generated" });
         } else {
+            console.log("Token already present");
             res.json({ "message": "Token already present" });
         }
     } catch (error) {
