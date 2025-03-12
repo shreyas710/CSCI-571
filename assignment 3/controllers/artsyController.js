@@ -2,7 +2,6 @@ const axios = require('axios');
 
 async function getArtsyToken() {
     try {
-        console.log("Generating token");
         const response = await axios.post(BASE_URL + '/tokens/xapp_token?client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET);
         return response.data.token
     } catch (error) {

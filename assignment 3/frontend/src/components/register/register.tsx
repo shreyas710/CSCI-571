@@ -39,7 +39,6 @@ export default function Register() {
         return;
       }
       login();
-      console.log("User data:", data);
       setUser(data);
       navigate("/");
     } catch (error) {

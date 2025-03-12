@@ -34,7 +34,6 @@ export default function Home() {
   const { login, setUser } = useAuth();
 
   useEffect(() => {
-    console.log(document.cookie);
     const cookies = document.cookie.split(";");
     if (cookies.length > 0) {
       cookies.forEach((cookie) => {
@@ -73,7 +72,6 @@ export default function Home() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
         login();
         setUser(data);
       } catch (e) {
@@ -133,7 +131,6 @@ export default function Home() {
         `/api/artsy/get_artist_artworks/${selectedArtist!.id}`
       );
       const data = await response.json();
-      console.log(data);
       setArtworks(data);
     } catch (error) {
       console.error(error);
