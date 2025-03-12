@@ -23,13 +23,10 @@ const createGravatar = async (email) => {
 const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
-        if (!name || !email || !password) {
-            res.status(400);
-            throw new Error("Please Enter all the Feilds");
-        }
         const userExists = await User.findOne({ email });
         if (userExists) {
-            res.status(400);
+            res.status(401);
+            res.json({ message: "User with this email already exists." });
             throw new Error("User already exists");
         }
         const pic = await createGravatar(email);
@@ -66,7 +63,7 @@ const loginUser = async (req, res) => {
             });
         } else {
             res.status(401);
-            res.json({ message: "Password or email is incorrect" });
+            res.json({ message: "Password or email is incorrect." });
             throw new Error("Invalid email or password");
         }
     } catch (error) {

@@ -63,7 +63,7 @@ export default function Login() {
                 value={email}
                 onChange={(e) => {
                   if (emailRegex.test(e.target.value) == false) {
-                    setErrorEmail("Email must be valid");
+                    setErrorEmail("Email must be valid.");
                   } else {
                     setErrorEmail("");
                   }
@@ -84,7 +84,7 @@ export default function Login() {
                 value={password}
                 onChange={(e) => {
                   if (e.target.value == "") {
-                    setErrorPassword("Password is required");
+                    setErrorPassword("Password is required.");
                   } else {
                     setErrorPassword("");
                   }
