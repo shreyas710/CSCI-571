@@ -117,7 +117,7 @@ export default function Home() {
         }`
       );
       const data = await response.json();
-      console.log(data)
+      console.log(data);
       setSelectedArtist(data);
     } catch (error) {
       console.error(error);
@@ -168,7 +168,13 @@ export default function Home() {
           <Button
             variant='secondary'
             disabled={search == "" ? true : false}
-            onClick={() => setSearch("")}
+            onClick={() => {
+              setArtists([]);
+              setSelectedArtist(null);
+              setCard(null);
+              setArtworks([]);
+              setSearch("");
+            }}
             style={{ borderRadius: "0 5px 5px 0" }}>
             Clear
           </Button>
