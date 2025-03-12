@@ -56,7 +56,7 @@ export default function Home() {
       try {
         const response = await fetch("/api/artsy");
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`Error getting artsy token: ${response.status}`);
         }
         await response.json();
       } catch (e) {
@@ -73,12 +73,11 @@ export default function Home() {
             Authorization: `Bearer ${userToken}`,
           },
         });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
         const data = await response.json();
-        login();
-        setUser(data);
+        if (data) {
+          login();
+          setUser(data);
+        }
       } catch (e) {
         console.error(e);
       }
