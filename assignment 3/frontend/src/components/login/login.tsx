@@ -1,18 +1,40 @@
-import { Container, Form, Button, Card } from "react-bootstrap";
+import { Container, Form, Button, Card, Spinner } from "react-bootstrap";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const { login, setUser } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [loggedInLoader, setLoggedInLoader] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Login attempt with:", { email, password });
-    login();
+    setLoggedInLoader(true);
+    try {
+      const response = await fetch(`/api/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await response.json();
+      login();
+      setUser(data);
+      navigate("/");
+    } catch (error) {
+      console.error("Login failed:", error);
+    } finally {
+      setLoggedInLoader(false);
+    }
   };
 
   return (
@@ -49,7 +71,14 @@ export default function Login() {
               type='submit'
               className='w-100 py-2'
               style={{ backgroundColor: "#5883b0" }}>
-              Log in
+              {!loggedInLoader && "Log in"}
+              {loggedInLoader && (
+                <Spinner
+                  style={{ width: "20px", height: "20px" }}
+                  animation='border'
+                  role='status'
+                />
+              )}
             </Button>
           </Form>
         </Card.Body>

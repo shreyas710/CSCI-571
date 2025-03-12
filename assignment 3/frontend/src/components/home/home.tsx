@@ -156,7 +156,7 @@ export default function Home() {
 
       {fetchArtistLoader && (
         <Spinner
-          style={{ color: "rgb(1, 68, 134)" }}
+          style={{ color: "rgb(1, 68, 134)", width: "50px", height: "50px" }}
           animation='border'
           role='status'
           className='mt-5'
@@ -188,7 +188,7 @@ export default function Home() {
                 <Tab.Pane eventKey='second'>
                   {fetchArtworksLoader && (
                     <Spinner
-                      style={{ color: "rgb(1, 68, 134)" }}
+                      style={{ color: "rgb(1, 68, 134)", width: "50px", height: "50px" }}
                       animation='border'
                       role='status'
                       className='mt-5'
