@@ -73,6 +73,9 @@ export default function Home() {
             Authorization: `Bearer ${userToken}`,
           },
         });
+        if (response.status === 401) {
+          return;
+        }
         const data = await response.json();
         if (data) {
           login();

@@ -35,8 +35,7 @@ const getUserProfile = async (req, res) => {
                 token: req.user.token,
             });
         } else {
-            res.status(404);
-            throw new Error("User not found");
+            res.status(401);
         }
     }
     catch (error) {
@@ -52,7 +51,7 @@ const registerUser = async (req, res) => {
         if (userExists) {
             res.status(401);
             res.json({ message: "User with this email already exists." });
-            throw new Error("User already exists");
+            return;
         }
         const pic = createGravatar(email, name);
         const user = await User.create({ name, email, password, pic });
@@ -67,8 +66,7 @@ const registerUser = async (req, res) => {
                 token: userToken,
             });
         } else {
-            res.status(400);
-            throw new Error("User not found");
+            res.status(401);
         }
     } catch (error) {
         console.error(error);
@@ -93,7 +91,6 @@ const loginUser = async (req, res) => {
         } else {
             res.status(401);
             res.json({ message: "Password or email is incorrect." });
-            throw new Error("Invalid email or password");
         }
     } catch (error) {
         console.error(error);
@@ -108,8 +105,7 @@ const deleteUser = async (req, res) => {
             await user.deleteOne();
             res.json({ message: "User removed" });
         } else {
-            res.status(404);
-            throw new Error("User not found");
+            res.status(401);
         }
     } catch (error) {
         console.error(error);
