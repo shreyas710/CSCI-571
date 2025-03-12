@@ -31,6 +31,8 @@ export default function Home() {
   const [userToken, setUserToken] = useState<string | null>(null);
   const [artsyToken, setArtsyToken] = useState<string | null>(null);
 
+  const [hoveredCard, setHoveredCard] = useState<Artist | null>(null);
+
   const { login, setUser } = useAuth();
 
   useEffect(() => {
@@ -115,6 +117,7 @@ export default function Home() {
         }`
       );
       const data = await response.json();
+      console.log(data)
       setSelectedArtist(data);
     } catch (error) {
       console.error(error);
@@ -178,10 +181,13 @@ export default function Home() {
           style={{ whiteSpace: "nowrap" }}>
           {artists.map((artist, index) => (
             <div
+              onMouseEnter={() => setHoveredCard(artist)}
+              onMouseLeave={() => setHoveredCard(null)}
               onClick={() => fetchArtist(artist)}
               key={index}
               className='d-inline-block me-3'>
               <ArtistCard
+                hovered={hoveredCard === artist}
                 selected={card === artist}
                 image={
                   artist._links.thumbnail.href.includes("missing_image.png")

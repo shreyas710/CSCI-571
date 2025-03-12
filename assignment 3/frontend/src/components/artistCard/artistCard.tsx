@@ -5,10 +5,12 @@ export default function ArtistCard({
   image,
   text,
   selected,
+  hovered,
 }: {
   image: string;
   text: string;
   selected: boolean;
+  hovered: boolean;
 }) {
   return (
     <Card className='artist-card border-0 shadow-sm'>
@@ -20,10 +22,13 @@ export default function ArtistCard({
           style={{ objectFit: "cover", borderRadius: "0 0 0 0" }}
         />
       </div>
-      <Card.Footer className='py-3 text-white' style={{
-        backgroundColor: `${selected ? "rgb(1, 68, 134)" : 
-        "rgb(18, 37, 51)"}`
-      }}>
+      <Card.Footer
+        className='card-footer py-3 text-white'
+        style={{
+          backgroundColor: `${
+            selected || hovered ? "rgb(1, 68, 134)" : "rgb(18, 37, 51)"
+          }`,
+        }}>
         <Container fluid>
           <Row>
             <Col xs={12}>
