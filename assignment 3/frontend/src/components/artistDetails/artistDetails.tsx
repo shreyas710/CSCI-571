@@ -4,10 +4,8 @@ export default function ArtistDetails({ artist }: { artist: SelectedArtist }) {
   const paragraphs = artist.biography.split("\n\n");
 
   function combineSplitWords(text: string) {
-    // The regex pattern you specified: word, hyphen, space, word
     const splitWordRegex = /(\w+)-\s(\w+)/g;
 
-    // Replace matches by removing the hyphen and space between word parts
     return text.replace(splitWordRegex, (firstPart, secondPart) => {
       return `${secondPart}${firstPart.split("- ")[1]}`;
     });
