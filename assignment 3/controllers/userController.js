@@ -55,20 +55,18 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
-        if (!email || !password) {
-            res.status(400);
-            throw new Error("Please Enter all the Feilds");
-        }
         const user = await User.findOne({ email });
         if (user && (await user.matchPassword(password))) {
             res.json({
                 _id: user._id,
                 name: user.name,
                 email: user.email,
+                pic: user.pic,
                 token: generateToken(user._id),
             });
         } else {
             res.status(401);
+            res.json({ message: "Password or email is incorrect" });
             throw new Error("Invalid email or password");
         }
     } catch (error) {

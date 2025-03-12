@@ -1,8 +1,9 @@
 interface User {
-  email: string,
+  email: string;
   name: string;
-  token: string,
-  _id: string
+  token: string;
+  pic: string;
+  _id: string;
 }
 
 export default User;

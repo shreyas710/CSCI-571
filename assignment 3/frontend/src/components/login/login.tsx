@@ -12,11 +12,17 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
   const [loggedInLoader, setLoggedInLoader] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Login attempt with:", { email, password });
+
     setLoggedInLoader(true);
     try {
       const response = await fetch(`/api/users/login`, {
@@ -27,6 +33,11 @@ export default function Login() {
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
+      console.log("Login response:", data);
+      if (response.status === 401) {
+        setErrorPassword(data.message);
+        return;
+      }
       login();
       setUser(data);
       navigate("/");
@@ -50,9 +61,19 @@ export default function Login() {
                 type='email'
                 placeholder='Enter email'
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  if (emailRegex.test(e.target.value) == false) {
+                    setErrorEmail("Email must be valid");
+                  } else {
+                    setErrorEmail("");
+                  }
+                  setEmail(e.target.value);
+                }}
                 required
               />
+              {errorEmail && (
+                <Form.Text className='text-danger'>{errorEmail}</Form.Text>
+              )}
             </Form.Group>
 
             <Form.Group className='mb-4' controlId='formBasicPassword'>
@@ -61,12 +82,28 @@ export default function Login() {
                 type='password'
                 placeholder='Password'
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  if (e.target.value == "") {
+                    setErrorPassword("Password is required");
+                  } else {
+                    setErrorPassword("");
+                  }
+                  setPassword(e.target.value);
+                }}
                 required
               />
+              {errorPassword && (
+                <Form.Text className='text-danger'>{errorPassword}</Form.Text>
+              )}
             </Form.Group>
 
             <Button
+              disabled={
+                errorEmail != "" ||
+                errorPassword != "" ||
+                email == "" ||
+                password == ""
+              }
               variant='primary'
               type='submit'
               className='w-100 py-2'
