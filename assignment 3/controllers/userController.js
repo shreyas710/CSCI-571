@@ -4,19 +4,22 @@ const crypto = require('crypto');
 const axios = require('axios');
 
 // create gravatar for user
-const createGravatar = async (email) => {
-    try {
-        const hash = crypto.createHash('sha256').update(email.trim().toLowerCase()).digest('hex');
+function getInitials(name) {
+    const words = name.split(' ');
+    let initials = '';
 
-        const response = await axios.get(`https://api.gravatar.com/v3/profiles/${hash}`, {
-            headers: {
-                Authorization: `Bearer ${process.env.GRAVATAR_KEY}`,
-            },
-        });
-        return response.data.avatar_url;
-    } catch (error) {
-        console.error(error);
+    for (const word of words) {
+        if (word.length > 0) {
+            initials += word[0].toUpperCase();
+        }
     }
+    return initials;
+}
+
+const createGravatar = (email, name) => {
+    console.log(email);
+    const hash = crypto.createHash('sha256').update(email.trim().toLowerCase()).digest('hex');
+    return `https://www.gravatar.com/avatar/${hash}?d=initials&initials=${getInitials(name)}&s=200&r=pg`;
 }
 
 // get user profile
@@ -51,7 +54,7 @@ const registerUser = async (req, res) => {
             res.json({ message: "User with this email already exists." });
             throw new Error("User already exists");
         }
-        const pic = await createGravatar(email);
+        const pic = createGravatar(email, name);
         const user = await User.create({ name, email, password, pic });
         if (user) {
             const userToken = generateToken(user._id);

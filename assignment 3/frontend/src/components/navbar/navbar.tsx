@@ -111,6 +111,8 @@ export default function NavBar() {
                           height: "30px",
                           width: "30px",
                           borderRadius: "50%",
+                          backgroundColor: "gray",
+                          color: "black",
                         }}
                       />
                       {user!.name}
