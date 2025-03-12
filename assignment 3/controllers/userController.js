@@ -29,6 +29,7 @@ const getUserProfile = async (req, res) => {
                 name: req.user.name,
                 email: req.user.email,
                 pic: req.user.pic,
+                token: req.user.token,
             });
         } else {
             res.status(404);
@@ -96,4 +97,20 @@ const loginUser = async (req, res) => {
     }
 }
 
-module.exports = { getUserProfile, registerUser, loginUser };
+// delete user account
+const deleteUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        if (user) {
+            await user.deleteOne();
+            res.json({ message: "User removed" });
+        } else {
+            res.status(404);
+            throw new Error("User not found");
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+module.exports = { getUserProfile, registerUser, loginUser, deleteUser };

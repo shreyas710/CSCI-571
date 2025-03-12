@@ -17,6 +17,27 @@ export default function NavBar() {
     document.cookie = name + "=" + ";expires=Thu, 01 Jan 1970 00:00:01 GMT";
   }
 
+  async function deleteUser() {
+    try {
+      const response = await fetch("/api/users", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
+      if (response.ok) {
+        setUser(null);
+        logout();
+        deleteCookie("userToken");
+      } else {
+        console.log("Failed to delete user");
+      }
+    } catch (error) {
+      console.error("Failed to delete user", error);
+    }
+  }
+
   return (
     <Navbar expand='lg' className='bg-body-tertiary'>
       <Container fluid>
@@ -96,7 +117,9 @@ export default function NavBar() {
                     </>
                   }
                   id='basic-nav-dropdown'>
-                  <NavDropdown.Item className='text-danger me-3'>
+                  <NavDropdown.Item
+                    onClick={() => deleteUser()}
+                    className='text-danger me-3'>
                     Delete account
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
