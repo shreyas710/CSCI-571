@@ -9,6 +9,7 @@ import ArtistDetails from "../artistDetails/artistDetails";
 import Tab from "react-bootstrap/Tab";
 import Artwork from "../../types/artworkType";
 import ArtistArtworks from "../artistArtworks/artistArtworks";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Home() {
   const [search, setSearch] = useState<string>("");
@@ -27,7 +28,26 @@ export default function Home() {
 
   const [fetchArtistLoader, setFetchArtistLoader] = useState<boolean>(false);
 
+  const [userToken, setUserToken] = useState<string | null>(null);
+  const [artsyToken, setArtsyToken] = useState<string | null>(null);
+
+  const { login, setUser } = useAuth();
+
   useEffect(() => {
+    console.log(document.cookie);
+    const cookies = document.cookie.split(";");
+    if (cookies.length > 0) {
+      cookies.forEach((cookie) => {
+        const [key, value] = cookie.split("=");
+        if (key.trim() === "userToken") {
+          setUserToken(value);
+        }
+        if (key.trim() === "token") {
+          setArtsyToken(value);
+        }
+      });
+    }
+
     const fetchToken = async () => {
       try {
         const response = await fetch("/api/artsy");
@@ -42,8 +62,32 @@ export default function Home() {
       }
     };
 
-    fetchToken();
-  }, []);
+    const fetchUser = async () => {
+      try {
+        const response = await fetch("/api/users", {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data);
+        login();
+        setUser(data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    if (!artsyToken) {
+      fetchToken();
+    }
+    if (userToken) {
+      fetchUser();
+    }
+  }, [artsyToken, userToken]);
 
   async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
@@ -99,7 +143,7 @@ export default function Home() {
   }
 
   return (
-    <Container className='text-center' style={{marginBottom: "50px"}}>
+    <Container className='text-center' style={{ marginBottom: "50px" }}>
       <Form>
         <Form.Group
           className='mt-5 w-100 d-inline-flex'
@@ -188,7 +232,11 @@ export default function Home() {
                 <Tab.Pane eventKey='second'>
                   {fetchArtworksLoader && (
                     <Spinner
-                      style={{ color: "rgb(1, 68, 134)", width: "50px", height: "50px" }}
+                      style={{
+                        color: "rgb(1, 68, 134)",
+                        width: "50px",
+                        height: "50px",
+                      }}
                       animation='border'
                       role='status'
                       className='mt-5'

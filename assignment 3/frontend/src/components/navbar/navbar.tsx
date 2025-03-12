@@ -13,6 +13,10 @@ export default function NavBar() {
 
   const { user, isLoggedIn, logout, setUser } = useAuth();
 
+  function deleteCookie(name: string) {
+    document.cookie = name + "=" + ";expires=Thu, 01 Jan 1970 00:00:01 GMT";
+  }
+
   return (
     <Navbar expand='lg' className='bg-body-tertiary'>
       <Container fluid>
@@ -102,6 +106,7 @@ export default function NavBar() {
                       console.log("Logging out");
                       setUser(null);
                       logout();
+                      deleteCookie("userToken");
                     }}>
                     Log out
                   </NavDropdown.Item>

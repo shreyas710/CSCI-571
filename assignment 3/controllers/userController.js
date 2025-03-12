@@ -19,6 +19,27 @@ const createGravatar = async (email) => {
     }
 }
 
+// get user profile
+const getUserProfile = async (req, res) => {
+    try {
+        if (req.user) {
+            res.status(200);
+            res.json({
+                _id: req.user._id,
+                name: req.user.name,
+                email: req.user.email,
+                pic: req.user.pic,
+            });
+        } else {
+            res.status(404);
+            throw new Error("User not found");
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
+
 // register a new user
 const registerUser = async (req, res) => {
     try {
@@ -75,4 +96,4 @@ const loginUser = async (req, res) => {
     }
 }
 
-module.exports = { registerUser, loginUser };
+module.exports = { getUserProfile, registerUser, loginUser };
