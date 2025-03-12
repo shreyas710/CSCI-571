@@ -12,9 +12,14 @@ async function getArtsyToken() {
 
 const generateToken = async (req, res) => {
     try {
-        var newDate = new Date(new Date().getTime() + 86400000);
-        res.cookie('token', await getArtsyToken(), { expires: newDate });
-        res.json({ "message": "Token generated" });
+        const token = req.cookies.token;
+        if (token === undefined) {
+            var newDate = new Date(new Date().getTime() + 86400000);
+            res.cookie('token', await getArtsyToken(), { expires: newDate });
+            res.json({ "message": "Token generated" });
+        } else {
+            res.json({ "message": "Token already present" });
+        }
     } catch (error) {
         console.error(error);
     }
