@@ -33,6 +33,9 @@ export default function Home() {
 
   const [hoveredCard, setHoveredCard] = useState<Artist | null>(null);
 
+  const [alert, setAlert] = useState<string | null>(null);
+  const [artworkAlert, setArtworkAlert] = useState<string | null>(null);
+
   const { login, setUser } = useAuth();
 
   useEffect(() => {
@@ -92,10 +95,15 @@ export default function Home() {
   async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     setLoading(true);
-
+    setArtworkAlert(null);
+    setAlert(null);
+    setSelectedArtist(null);
     try {
       const response = await fetch(`/api/artsy/search_artist/${search}`);
       const data = await response.json();
+      if (data.length === 0) {
+        setAlert("No artists.");
+      }
       setArtists(data);
     } catch (error) {
       console.error(error);
@@ -108,6 +116,7 @@ export default function Home() {
     setCard(artist);
     setSelectedArtist(null);
     setFetchArtistLoader(true);
+    setArtworkAlert(null);
     try {
       const response = await fetch(
         `/api/artsy/get_artist/${
@@ -129,11 +138,15 @@ export default function Home() {
   async function fetchArtworks() {
     setArtworks([]);
     setFetchArtworksLoader(true);
+    setArtworkAlert(null);
     try {
       const response = await fetch(
         `/api/artsy/get_artist_artworks/${selectedArtist!.id}`
       );
       const data = await response.json();
+      if (data.length === 0) {
+        setArtworkAlert("No artworks.");
+      }
       setArtworks(data);
     } catch (error) {
       console.error(error);
@@ -174,6 +187,7 @@ export default function Home() {
               setCard(null);
               setArtworks([]);
               setSearch("");
+              setAlert(null);
             }}
             style={{ borderRadius: "0 5px 5px 0" }}>
             Clear
@@ -204,6 +218,11 @@ export default function Home() {
               />
             </div>
           ))}
+        </div>
+      )}
+      {alert && (
+        <div className='alert alert-danger text-lg-start mt-3' role='alert'>
+          {alert}
         </div>
       )}
 
@@ -255,6 +274,13 @@ export default function Home() {
                     <ArtistArtworks artworks={artworks} />
                   )}
                 </Tab.Pane>
+              )}
+              {artworkAlert && (
+                <div
+                  className='alert alert-danger text-lg-start mt-3'
+                  role='alert'>
+                  {artworkAlert}
+                </div>
               )}
             </Tab.Content>
           </Row>
