@@ -30,14 +30,14 @@ export default function ArtistDetails({ artist }: { artist: SelectedArtist }) {
             (toggleFavorite ? (
               <StarFill
                 onClick={() => setToggleFavorite(!toggleFavorite)}
-                className='ms-2 pb-1'
+                className='ms-1 pb-2'
                 style={{ color: "gold", cursor: "pointer" }}
                 size={30}
               />
             ) : (
               <Star
                 onClick={() => setToggleFavorite(!toggleFavorite)}
-                className='ms-2 pb-1'
+                className='ms-1 pb-2'
                 style={{
                   cursor: "pointer",
                 }}

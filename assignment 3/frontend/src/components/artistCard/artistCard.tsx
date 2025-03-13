@@ -1,5 +1,8 @@
 import { Card, Container, Row, Col } from "react-bootstrap";
 import "./artistCard.css";
+import { useAuth } from "../../context/AuthContext";
+import { useState } from "react";
+import { Star, StarFill } from "react-bootstrap-icons";
 
 export default function ArtistCard({
   image,
@@ -12,6 +15,9 @@ export default function ArtistCard({
   selected: boolean;
   hovered: boolean;
 }) {
+  const { isLoggedIn } = useAuth();
+  const [toggleFavorite, setToggleFavorite] = useState<boolean>(false);
+
   return (
     <Card className='artist-card border-0 shadow-sm'>
       <div className='image-container'>
@@ -22,6 +28,42 @@ export default function ArtistCard({
           style={{ objectFit: "cover", borderRadius: "0 0 0 0" }}
         />
       </div>
+      {isLoggedIn && (
+        <div
+          style={{
+            position: "absolute",
+            zIndex: 1000,
+            top: 10,
+            right: 10,
+            borderRadius: "50%",
+            backgroundColor: "rgb(14, 67, 134)",
+            width: 35,
+            height: 35,
+          }}>
+          {toggleFavorite ? (
+            <StarFill
+              onClick={() => setToggleFavorite(!toggleFavorite)}
+              className='pt-1'
+              style={{
+                color: "gold",
+                cursor: "pointer",
+              }}
+              size={25}
+            />
+          ) : (
+            <Star
+              onClick={() => setToggleFavorite(!toggleFavorite)}
+              className='pt-1'
+              style={{
+                color: "white",
+                cursor: "pointer",
+              }}
+              size={25}
+            />
+          )}
+        </div>
+      )}
+
       <Card.Footer
         className='card-footer py-3 text-white'
         style={{
