@@ -1,7 +1,6 @@
-// import { useState } from "react";
 import { Star, StarFill } from "react-bootstrap-icons";
 import { useAuth } from "../../context/AuthContext";
-// import { useNotifications } from "../../context/NotificationContext";
+import { useNotifications } from "../../context/NotificationContext";
 import SelectedArtist from "../../types/selectedArtistType";
 import { useEffect, useState } from "react";
 import { useFavorites } from "../../context/FavoriteContext";
@@ -10,7 +9,7 @@ export default function ArtistDetails({ artist }: { artist: SelectedArtist }) {
   const paragraphs = artist.biography.split("\n\n");
 
   const { isLoggedIn } = useAuth();
-  // const { notifications, setNotifications } = useNotifications();
+  const { notifications, setNotifications } = useNotifications();
 
   const { favorites, setFavorites } = useFavorites();
 
@@ -34,8 +33,26 @@ export default function ArtistDetails({ artist }: { artist: SelectedArtist }) {
 
   const handleClick = () => {
     if (toggleFavorite) {
+      setNotifications([
+        ...notifications,
+        {
+          message: `Removed from favorites`,
+          textColor: "text-danger",
+          backgroundColor: "rgb(249, 210, 214)",
+          show: true,
+        },
+      ]);
       setFavorites(favorites.filter((favorite) => favorite !== artist.id));
     } else {
+      setNotifications([
+        ...notifications,
+        {
+          message: `Added to favorites`,
+          textColor: "text-success",
+          backgroundColor: "rgb(214, 249, 210)",
+          show: true,
+        },
+      ]);
       setFavorites([...favorites, artist.id]);
     }
     setToggleFavorite(!toggleFavorite);

@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
 import { Star, StarFill } from "react-bootstrap-icons";
 import { useFavorites } from "../../context/FavoriteContext";
+import { useNotifications } from "../../context/NotificationContext";
 
 export default function ArtistCard({
   image,
@@ -23,6 +24,8 @@ export default function ArtistCard({
 
   const { favorites, setFavorites } = useFavorites();
 
+  const { notifications, setNotifications } = useNotifications();
+
   useEffect(() => {
     if (favorites.includes(id)) {
       setToggleFavorite(true);
@@ -34,8 +37,26 @@ export default function ArtistCard({
   const handleClick = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     e.stopPropagation();
     if (toggleFavorite) {
+      setNotifications([
+        ...notifications,
+        {
+          message: `Removed from favorites`,
+          textColor: "text-danger",
+          backgroundColor: "rgb(249, 210, 214)",
+          show: true,
+        },
+      ]);
       setFavorites(favorites.filter((favorite) => favorite !== id));
     } else {
+      setNotifications([
+        ...notifications,
+        {
+          message: `Added to favorites`,
+          textColor: "text-success",
+          backgroundColor: "rgb(214, 249, 210)",
+          show: true,
+        },
+      ]);
       setFavorites([...favorites, id]);
     }
     setToggleFavorite(!toggleFavorite);
