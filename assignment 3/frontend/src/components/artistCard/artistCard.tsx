@@ -76,7 +76,6 @@ export default function ArtistCard({
         <div
           style={{
             position: "absolute",
-            zIndex: 1000,
             top: 10,
             right: 10,
             borderRadius: "50%",
