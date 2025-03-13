@@ -10,6 +10,8 @@ import Tab from "react-bootstrap/Tab";
 import Artwork from "../../types/artworkType";
 import ArtistArtworks from "../artistArtworks/artistArtworks";
 import { useAuth } from "../../context/AuthContext";
+import StackingExample from "../notifications/notifications";
+import { useNotifications } from "../../context/NotificationContext";
 
 export default function Home() {
   const [search, setSearch] = useState<string>("");
@@ -35,6 +37,8 @@ export default function Home() {
 
   const [alert, setAlert] = useState<string | null>(null);
   const [artworkAlert, setArtworkAlert] = useState<string | null>(null);
+
+  const { notifications } = useNotifications();
 
   const { login, setUser } = useAuth();
 
@@ -128,7 +132,6 @@ export default function Home() {
         }`
       );
       const data = await response.json();
-      console.log(data);
       setSelectedArtist(data);
     } catch (error) {
       console.error(error);
@@ -290,6 +293,16 @@ export default function Home() {
           </Row>
         </Tab.Container>
       )}
+
+      <div
+        style={{
+          position: "fixed",
+          top: "80px",
+          right: "10px",
+          width: "300px",
+        }}>
+        <StackingExample notifications={notifications} />
+      </div>
     </Container>
   );
 }

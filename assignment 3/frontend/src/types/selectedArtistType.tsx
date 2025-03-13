@@ -16,6 +16,7 @@ interface SelectedArtist {
   updated_at: string;
   links: Links;
   thumbnail: ResourceLink;
+  isFavorite?: boolean;
 }
 
 interface Links {

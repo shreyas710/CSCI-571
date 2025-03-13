@@ -6,12 +6,15 @@ import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useNotifications } from "../../context/NotificationContext";
 
 export default function NavBar() {
   const location = useLocation();
   const currentPath = location.pathname;
 
   const { user, isLoggedIn, logout, setUser } = useAuth();
+
+  const { notifications, setNotifications } = useNotifications();
 
   function deleteCookie(name: string) {
     document.cookie = name + "=" + ";expires=Thu, 01 Jan 1970 00:00:01 GMT";
@@ -29,6 +32,15 @@ export default function NavBar() {
       if (response.ok) {
         setUser(null);
         logout();
+        setNotifications([
+          ...notifications,
+          {
+            message: "Account deleted",
+            backgroundColor: "rgb(249, 210, 214)",
+            textColor: "text-danger",
+            show: true,
+          },
+        ]);
         deleteCookie("userToken");
       } else {
         console.log("Failed to delete user");
@@ -131,6 +143,15 @@ export default function NavBar() {
                       console.log("Logging out");
                       setUser(null);
                       logout();
+                      setNotifications([
+                        ...notifications,
+                        {
+                          message: "Logged out",
+                          backgroundColor: "rgb(203,226,216)",
+                          textColor: "text-success",
+                          show: true,
+                        },
+                      ]);
                       deleteCookie("userToken");
                     }}>
                     Log out
