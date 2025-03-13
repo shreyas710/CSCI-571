@@ -3,13 +3,16 @@ import { Star, StarFill } from "react-bootstrap-icons";
 import { useAuth } from "../../context/AuthContext";
 // import { useNotifications } from "../../context/NotificationContext";
 import SelectedArtist from "../../types/selectedArtistType";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useFavorites } from "../../context/FavoriteContext";
 
 export default function ArtistDetails({ artist }: { artist: SelectedArtist }) {
   const paragraphs = artist.biography.split("\n\n");
 
   const { isLoggedIn } = useAuth();
   // const { notifications, setNotifications } = useNotifications();
+
+  const { favorites, setFavorites } = useFavorites();
 
   function combineSplitWords(text: string) {
     const splitWordRegex = /(\w+)-\s(\w+)/g;
@@ -21,6 +24,23 @@ export default function ArtistDetails({ artist }: { artist: SelectedArtist }) {
 
   const [toggleFavorite, setToggleFavorite] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (favorites.includes(artist.id)) {
+      setToggleFavorite(true);
+    } else {
+      setToggleFavorite(false);
+    }
+  }, [favorites, artist.id]);
+
+  const handleClick = () => {
+    if (toggleFavorite) {
+      setFavorites(favorites.filter((favorite) => favorite !== artist.id));
+    } else {
+      setFavorites([...favorites, artist.id]);
+    }
+    setToggleFavorite(!toggleFavorite);
+  };
+
   return (
     <div className='mt-3'>
       <div className='text-center'>
@@ -29,14 +49,14 @@ export default function ArtistDetails({ artist }: { artist: SelectedArtist }) {
           {isLoggedIn &&
             (toggleFavorite ? (
               <StarFill
-                onClick={() => setToggleFavorite(!toggleFavorite)}
+                onClick={handleClick}
                 className='ms-1 pb-2'
                 style={{ color: "gold", cursor: "pointer" }}
                 size={30}
               />
             ) : (
               <Star
-                onClick={() => setToggleFavorite(!toggleFavorite)}
+                onClick={handleClick}
                 className='ms-1 pb-2'
                 style={{
                   cursor: "pointer",

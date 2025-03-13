@@ -220,6 +220,9 @@ export default function Home() {
                     : artist._links.thumbnail.href
                 }
                 text={artist.title}
+                id={artist._links.self.href.split("/")[
+                  artist._links.self.href.split("/").length - 1
+                ]}
               />
             </div>
           ))}

@@ -1,22 +1,45 @@
 import { Card, Container, Row, Col } from "react-bootstrap";
 import "./artistCard.css";
 import { useAuth } from "../../context/AuthContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Star, StarFill } from "react-bootstrap-icons";
+import { useFavorites } from "../../context/FavoriteContext";
 
 export default function ArtistCard({
   image,
   text,
   selected,
   hovered,
+  id,
 }: {
   image: string;
   text: string;
   selected: boolean;
   hovered: boolean;
+  id: string;
 }) {
   const { isLoggedIn } = useAuth();
   const [toggleFavorite, setToggleFavorite] = useState<boolean>(false);
+
+  const { favorites, setFavorites } = useFavorites();
+
+  useEffect(() => {
+    if (favorites.includes(id)) {
+      setToggleFavorite(true);
+    } else {
+      setToggleFavorite(false);
+    }
+  }, [favorites, id]);
+
+  const handleClick = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
+    e.stopPropagation();
+    if (toggleFavorite) {
+      setFavorites(favorites.filter((favorite) => favorite !== id));
+    } else {
+      setFavorites([...favorites, id]);
+    }
+    setToggleFavorite(!toggleFavorite);
+  };
 
   return (
     <Card className='artist-card border-0 shadow-sm'>
@@ -42,7 +65,7 @@ export default function ArtistCard({
           }}>
           {toggleFavorite ? (
             <StarFill
-              onClick={() => setToggleFavorite(!toggleFavorite)}
+              onClick={(e) => handleClick(e)}
               className='pt-1'
               style={{
                 color: "gold",
@@ -52,7 +75,7 @@ export default function ArtistCard({
             />
           ) : (
             <Star
-              onClick={() => setToggleFavorite(!toggleFavorite)}
+              onClick={(e) => handleClick(e)}
               className='pt-1'
               style={{
                 color: "white",
