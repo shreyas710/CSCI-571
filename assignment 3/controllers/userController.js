@@ -121,8 +121,8 @@ const addFavorite = async (req, res) => {
         const user = await User.findById(req.user._id);
         if (user) {
             user.favorites.push({ id });
-            await user.save();
-            res.json({ message: "Favorite added" });
+            const data = await user.save();
+            res.json({ favorites: user.favorites });
         } else {
             res.status(401);
         }

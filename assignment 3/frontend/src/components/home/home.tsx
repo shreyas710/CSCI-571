@@ -114,6 +114,7 @@ export default function Home() {
     setArtworkAlert(null);
     setAlert(null);
     setSelectedArtist(null);
+    setSimilarArtists([]);
     localStorage.clear();
     try {
       const response = await fetch(`/api/artsy/search_artist/${search}`);
@@ -291,7 +292,7 @@ export default function Home() {
           <Row>
             <Tab.Content>
               <Tab.Pane eventKey='first'>
-                <ArtistDetails artist={selectedArtist} />
+                <ArtistDetails userToken={userToken} artist={selectedArtist} />
               </Tab.Pane>
               {artworks && (
                 <Tab.Pane eventKey='second'>
