@@ -3,6 +3,8 @@ interface Artist {
   og_type: string;
   title: string;
   type: string;
+  name?: string;
+  id?: string;
   _links: {
     permalink: {
       href: string;

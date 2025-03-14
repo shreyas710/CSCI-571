@@ -18,6 +18,7 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [artists, setArtists] = useState<Artist[]>([]);
+  const [similarArtists, setSimilarArtists] = useState<Artist[]>([]);
   const [card, setCard] = useState<Artist | null>(null);
 
   const [selectedArtist, setSelectedArtist] = useState<SelectedArtist | null>(
@@ -40,7 +41,7 @@ export default function Home() {
 
   const { notifications } = useNotifications();
 
-  const { login, setUser } = useAuth();
+  const { isLoggedIn, login, setUser } = useAuth();
 
   useEffect(() => {
     const cookies = document.cookie.split(";");
@@ -116,6 +117,7 @@ export default function Home() {
       if (data.length === 0) {
         setAlert("No artists.");
       }
+      console.log(data);
       setArtists(data);
     } catch (error) {
       console.error(error);
@@ -140,6 +142,19 @@ export default function Home() {
       const data = await response.json();
       setSelectedArtist(data);
       localStorage.setItem("selectedArtist", JSON.stringify(data));
+
+      if (isLoggedIn) {
+        const responseSimilar = await fetch(
+          `/api/artsy/get_similar_artists/${
+            artist._links.self.href.split("/")[
+              artist._links.self.href.split("/").length - 1
+            ]
+          }`
+        );
+        const dataSimilar = await responseSimilar.json();
+        console.log(dataSimilar);
+        setSimilarArtists(dataSimilar);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -304,6 +319,37 @@ export default function Home() {
             </Tab.Content>
           </Row>
         </Tab.Container>
+      )}
+
+      {isLoggedIn && similarArtists.length > 0 && (
+        <div
+          className='mt-3 overflow-auto home-artist-card'
+          style={{ whiteSpace: "nowrap" }}>
+          {similarArtists.map((artist, index) => (
+            <div
+              onMouseEnter={() => setHoveredCard(artist)}
+              onMouseLeave={() => setHoveredCard(null)}
+              onClick={() => fetchArtist(artist)}
+              key={index}
+              className='d-inline-block me-3'>
+              <ArtistCard
+                hovered={hoveredCard === artist}
+                selected={card === artist}
+                image={
+                  artist._links.thumbnail.href.includes("missing_image.png")
+                    ? artsyLogo
+                    : artist._links.thumbnail.href
+                }
+                text={artist.name == undefined ? "" : artist.name}
+                id={
+                  artist._links.self.href.split("/")[
+                    artist._links.self.href.split("/").length - 1
+                  ]
+                }
+              />
+            </div>
+          ))}
+        </div>
       )}
 
       <div

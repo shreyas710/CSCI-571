@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const { generateToken,
     searchArtist,
     getArtistByID,
+    getSimilarArtistByID,
     getArtistArtworks,
     getArtistGenes } = require('../../controllers/artsyController');
 require('dotenv').config();
@@ -19,6 +20,9 @@ router.get('/search_artist/:name', searchArtist);
 
 // get artist by id
 router.get('/get_artist/:id', getArtistByID);
+
+// get similar artists
+router.get('/get_similar_artists/:id', getSimilarArtistByID);
 
 // get artworks for artist
 router.get('/get_artist_artworks/:id', getArtistArtworks);

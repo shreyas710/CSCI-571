@@ -119,10 +119,34 @@ const getArtistGenes = async (req, res) => {
     }
 }
 
+// get similar artists
+const getSimilarArtistByID = async (req, res) => {
+    try {
+        const token = req.cookies.token;
+        if (token === undefined) {
+            res.json({ "message": "Please generate a token first" });
+        }
+        const id = req.params.id;
+        if (id === undefined) {
+            res.json({ "message": "Please provide an id" });
+        }
+        const response = await axios.get(BASE_URL + '/artists?similar_to_artist_id=' + id, {
+            headers: {
+                'X-Xapp-Token': token
+            }
+        });
+        artist = response.data['_embedded']['artists'];
+        res.json(artist);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 module.exports = {
     generateToken,
     searchArtist,
     getArtistByID,
+    getSimilarArtistByID,
     getArtistArtworks,
     getArtistGenes
 };
