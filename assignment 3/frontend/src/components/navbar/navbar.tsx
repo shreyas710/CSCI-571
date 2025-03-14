@@ -140,7 +140,6 @@ export default function NavBar() {
                   <NavDropdown.Item
                     className='text-primary me-3'
                     onClick={() => {
-                      console.log("Logging out");
                       setUser(null);
                       logout();
                       setNotifications([

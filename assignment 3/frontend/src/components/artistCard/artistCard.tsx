@@ -12,12 +12,14 @@ export default function ArtistCard({
   selected,
   hovered,
   id,
+  userToken,
 }: {
   image: string;
   text: string;
   selected: boolean;
   hovered: boolean;
   id: string;
+  userToken: string | null;
 }) {
   const { isLoggedIn } = useAuth();
   const [toggleFavorite, setToggleFavorite] = useState<boolean>(false);
@@ -27,16 +29,51 @@ export default function ArtistCard({
   const { notifications, setNotifications } = useNotifications();
 
   useEffect(() => {
-    if (favorites.includes(id)) {
+    if (favorites.some((favorite) => favorite.id === id)) {
       setToggleFavorite(true);
     } else {
       setToggleFavorite(false);
     }
   }, [favorites, id]);
 
-  const handleClick = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
+  const addfavoritesToUser = async () => {
+    try {
+      const response = await fetch(`/api/users/favorites`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userToken}`,
+        },
+        body: JSON.stringify({ id }),
+      });
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Add favorite failed:", error);
+    }
+  };
+
+  const removeFavoriteFromUser = async () => {
+    try {
+      const response = await fetch(`/api/users/favorites`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userToken}`,
+        },
+        body: JSON.stringify({ id }),
+      });
+      const data = await response.json();
+      console.log("Remove favorite response:", data);
+    } catch (error) {
+      console.error("Remove favorite failed:", error);
+    }
+  };
+
+  const handleClick = async (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     e.stopPropagation();
     if (toggleFavorite) {
+      await removeFavoriteFromUser();
       setNotifications([
         ...notifications,
         {
@@ -46,8 +83,9 @@ export default function ArtistCard({
           show: true,
         },
       ]);
-      setFavorites(favorites.filter((favorite) => favorite !== id));
+      setFavorites(favorites.filter((favorite) => favorite.id !== id));
     } else {
+      const data = await addfavoritesToUser();
       setNotifications([
         ...notifications,
         {
@@ -57,7 +95,7 @@ export default function ArtistCard({
           show: true,
         },
       ]);
-      setFavorites([...favorites, id]);
+      setFavorites([...favorites, data]);
     }
     setToggleFavorite(!toggleFavorite);
   };

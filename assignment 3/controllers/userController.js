@@ -17,7 +17,6 @@ function getInitials(name) {
 }
 
 const createGravatar = (email, name) => {
-    console.log(email);
     const hash = crypto.createHash('sha256').update(email.trim().toLowerCase()).digest('hex');
     return `https://www.gravatar.com/avatar/${hash}?d=initials&initials=${getInitials(name)}&s=200&r=pg`;
 }
@@ -33,6 +32,7 @@ const getUserProfile = async (req, res) => {
                 email: req.user.email,
                 pic: req.user.pic,
                 token: req.user.token,
+                favorites: req.user.favorites,
             });
         } else {
             res.status(401);
@@ -54,7 +54,7 @@ const registerUser = async (req, res) => {
             return;
         }
         const pic = createGravatar(email, name);
-        const user = await User.create({ name, email, password, pic });
+        const user = await User.create({ name, email, password, pic, favorites: [] });
         if (user) {
             const userToken = generateToken(user._id);
             res.cookie('userToken', userToken, { maxAge: 3600000 });
@@ -64,6 +64,7 @@ const registerUser = async (req, res) => {
                 email: user.email,
                 pic: user.pic,
                 token: userToken,
+                favorites: user.favorites,
             });
         } else {
             res.status(401);
@@ -87,6 +88,7 @@ const loginUser = async (req, res) => {
                 email: user.email,
                 pic: user.pic,
                 token: userToken,
+                favorites: user.favorites,
             });
         } else {
             res.status(401);
@@ -112,4 +114,38 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = { getUserProfile, registerUser, loginUser, deleteUser };
+// add a favorite
+const addFavorite = async (req, res) => {
+    try {
+        const { id } = req.body;
+        const user = await User.findById(req.user._id);
+        if (user) {
+            user.favorites.push({ id });
+            await user.save();
+            res.json({ message: "Favorite added" });
+        } else {
+            res.status(401);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+// remove a favorite
+const removeFavorite = async (req, res) => {
+    try {
+        const { id } = req.body;
+        const user
+            = await User.findById(req.user._id);
+        if (user) {
+            user.favorites = user.favorites.filter(favorite => favorite.id !== id);
+            await user.save();
+            res.json({ message: "Favorite removed" });
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
+
+module.exports = { getUserProfile, registerUser, loginUser, deleteUser, addFavorite, removeFavorite };

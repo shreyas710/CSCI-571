@@ -24,7 +24,7 @@ export default function ArtistDetails({ artist }: { artist: SelectedArtist }) {
   const [toggleFavorite, setToggleFavorite] = useState<boolean>(false);
 
   useEffect(() => {
-    if (favorites.includes(artist.id)) {
+    if (favorites.some((favorite) => favorite.id === artist.id)) {
       setToggleFavorite(true);
     } else {
       setToggleFavorite(false);
@@ -42,7 +42,7 @@ export default function ArtistDetails({ artist }: { artist: SelectedArtist }) {
           show: true,
         },
       ]);
-      setFavorites(favorites.filter((favorite) => favorite !== artist.id));
+      setFavorites(favorites.filter((favorite) => favorite.id !== artist.id));
     } else {
       setNotifications([
         ...notifications,
@@ -53,7 +53,7 @@ export default function ArtistDetails({ artist }: { artist: SelectedArtist }) {
           show: true,
         },
       ]);
-      setFavorites([...favorites, artist.id]);
+      // setFavorites([...favorites, artist.id]);
     }
     setToggleFavorite(!toggleFavorite);
   };

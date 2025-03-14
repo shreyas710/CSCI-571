@@ -12,6 +12,7 @@ import ArtistArtworks from "../artistArtworks/artistArtworks";
 import { useAuth } from "../../context/AuthContext";
 import StackingExample from "../notifications/notifications";
 import { useNotifications } from "../../context/NotificationContext";
+import { useFavorites } from "../../context/FavoriteContext";
 
 export default function Home() {
   const [search, setSearch] = useState<string>("");
@@ -40,6 +41,8 @@ export default function Home() {
   const [artworkAlert, setArtworkAlert] = useState<string | null>(null);
 
   const { notifications } = useNotifications();
+
+  const { setFavorites } = useFavorites();
 
   const { isLoggedIn, login, setUser } = useAuth();
 
@@ -90,6 +93,7 @@ export default function Home() {
         if (data) {
           login();
           setUser(data);
+          setFavorites(data.favorites);
         }
       } catch (e) {
         console.error(e);
@@ -117,7 +121,6 @@ export default function Home() {
       if (data.length === 0) {
         setAlert("No artists.");
       }
-      console.log(data);
       setArtists(data);
     } catch (error) {
       console.error(error);
@@ -143,7 +146,7 @@ export default function Home() {
       setSelectedArtist(data);
       localStorage.setItem("selectedArtist", JSON.stringify(data));
 
-      if (isLoggedIn) {
+      if (isLoggedIn && similarArtists.length === 0) {
         const responseSimilar = await fetch(
           `/api/artsy/get_similar_artists/${
             artist._links.self.href.split("/")[
@@ -152,7 +155,6 @@ export default function Home() {
           }`
         );
         const dataSimilar = await responseSimilar.json();
-        console.log(dataSimilar);
         setSimilarArtists(dataSimilar);
       }
     } catch (error) {
@@ -234,6 +236,7 @@ export default function Home() {
               key={index}
               className='d-inline-block me-3'>
               <ArtistCard
+                userToken={userToken}
                 hovered={hoveredCard === artist}
                 selected={card === artist}
                 image={
@@ -333,6 +336,7 @@ export default function Home() {
               key={index}
               className='d-inline-block me-3'>
               <ArtistCard
+                userToken={userToken}
                 hovered={hoveredCard === artist}
                 selected={card === artist}
                 image={
@@ -341,11 +345,7 @@ export default function Home() {
                     : artist._links.thumbnail.href
                 }
                 text={artist.name == undefined ? "" : artist.name}
-                id={
-                  artist._links.self.href.split("/")[
-                    artist._links.self.href.split("/").length - 1
-                  ]
-                }
+                id={artist.id == undefined ? "" : artist.id}
               />
             </div>
           ))}

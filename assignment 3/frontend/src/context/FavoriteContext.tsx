@@ -1,8 +1,8 @@
 import { createContext, useState, useContext, ReactNode } from "react";
 
 interface FavoriteContextType {
-  favorites: string[];
-  setFavorites: (value: string[]) => void;
+  favorites: { id: string; createdAt: Date }[];
+  setFavorites: (value: { id: string; createdAt: Date }[]) => void;
 }
 
 const FavoriteContext = createContext<FavoriteContextType | undefined>(
@@ -10,7 +10,9 @@ const FavoriteContext = createContext<FavoriteContextType | undefined>(
 );
 
 function FavoritesProvider({ children }: { children: ReactNode }) {
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const [favorites, setFavorites] = useState<{ id: string; createdAt: Date }[]>(
+    []
+  );
 
   const value: FavoriteContextType = {
     favorites,
