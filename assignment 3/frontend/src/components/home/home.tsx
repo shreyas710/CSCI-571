@@ -218,6 +218,9 @@ export default function Home() {
               setArtworks([]);
               setSearch("");
               setAlert(null);
+              setAlert(null);
+              setArtworkAlert(null);
+              setSimilarArtists([]);
             }}
             style={{ borderRadius: "0 5px 5px 0" }}>
             Clear
