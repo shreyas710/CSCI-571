@@ -56,6 +56,11 @@ export default function Home() {
       });
     }
 
+    const selectedArtist = localStorage.getItem("selectedArtist");
+    if (selectedArtist) {
+      setSelectedArtist(JSON.parse(selectedArtist));
+    }
+
     const fetchToken = async () => {
       try {
         const response = await fetch("/api/artsy");
@@ -104,6 +109,7 @@ export default function Home() {
     setArtworkAlert(null);
     setAlert(null);
     setSelectedArtist(null);
+    localStorage.clear();
     try {
       const response = await fetch(`/api/artsy/search_artist/${search}`);
       const data = await response.json();
@@ -133,6 +139,7 @@ export default function Home() {
       );
       const data = await response.json();
       setSelectedArtist(data);
+      localStorage.setItem("selectedArtist", JSON.stringify(data));
     } catch (error) {
       console.error(error);
     } finally {
@@ -220,9 +227,11 @@ export default function Home() {
                     : artist._links.thumbnail.href
                 }
                 text={artist.title}
-                id={artist._links.self.href.split("/")[
-                  artist._links.self.href.split("/").length - 1
-                ]}
+                id={
+                  artist._links.self.href.split("/")[
+                    artist._links.self.href.split("/").length - 1
+                  ]
+                }
               />
             </div>
           ))}
