@@ -10,7 +10,7 @@ export default function ArtistDetails({
   userToken: string | null;
   artist: SelectedArtist;
 }) {
-  const paragraphs = artist.biography.split("\n\n");
+  const paragraphs = artist.biography ? artist.biography.split("\n\n") : [];
 
   const { isLoggedIn } = useAuth();
 
