@@ -135,6 +135,7 @@ export default function Home() {
     setSelectedArtist(null);
     setFetchArtistLoader(true);
     setArtworkAlert(null);
+    setSimilarArtists([]);
     try {
       const response = await fetch(
         `/api/artsy/get_artist/${
