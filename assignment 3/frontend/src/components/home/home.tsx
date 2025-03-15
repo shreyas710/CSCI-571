@@ -130,12 +130,12 @@ export default function Home() {
     }
   }
 
-  async function fetchArtist(artist: Artist) {
+  async function fetchArtist(artist: Artist, similarCard: boolean) {
     setCard(artist);
     setSelectedArtist(null);
     setFetchArtistLoader(true);
     setArtworkAlert(null);
-    setSimilarArtists([]);
+    if (!similarCard) setSimilarArtists([]);
     try {
       const response = await fetch(
         `/api/artsy/get_artist/${
@@ -148,7 +148,7 @@ export default function Home() {
       setSelectedArtist(data);
       localStorage.setItem("selectedArtist", JSON.stringify(data));
 
-      if (isLoggedIn && similarArtists.length === 0) {
+      if (isLoggedIn && !similarCard) {
         const responseSimilar = await fetch(
           `/api/artsy/get_similar_artists/${
             artist._links.self.href.split("/")[
@@ -237,7 +237,7 @@ export default function Home() {
             <div
               onMouseEnter={() => setHoveredCard(artist)}
               onMouseLeave={() => setHoveredCard(null)}
-              onClick={() => fetchArtist(artist)}
+              onClick={() => fetchArtist(artist, false)}
               key={index}
               className='d-inline-block me-3'>
               <ArtistCard
@@ -330,30 +330,33 @@ export default function Home() {
       )}
 
       {isLoggedIn && similarArtists.length > 0 && (
-        <div
-          className='mt-3 overflow-auto home-artist-card'
-          style={{ whiteSpace: "nowrap" }}>
-          {similarArtists.map((artist, index) => (
-            <div
-              onMouseEnter={() => setHoveredCard(artist)}
-              onMouseLeave={() => setHoveredCard(null)}
-              onClick={() => fetchArtist(artist)}
-              key={index}
-              className='d-inline-block me-3'>
-              <ArtistCard
-                userToken={userToken}
-                hovered={hoveredCard === artist}
-                selected={card === artist}
-                image={
-                  artist._links.thumbnail.href.includes("missing_image.png")
-                    ? artsyLogo
-                    : artist._links.thumbnail.href
-                }
-                text={artist.name == undefined ? "" : artist.name}
-                id={artist.id == undefined ? "" : artist.id}
-              />
-            </div>
-          ))}
+        <div>
+          <h3 className='text-start'>Similar Artists</h3>
+          <div
+            className='mt-3 overflow-auto home-artist-card'
+            style={{ whiteSpace: "nowrap" }}>
+            {similarArtists.map((artist, index) => (
+              <div
+                onMouseEnter={() => setHoveredCard(artist)}
+                onMouseLeave={() => setHoveredCard(null)}
+                onClick={() => fetchArtist(artist, true)}
+                key={index}
+                className='d-inline-block me-3'>
+                <ArtistCard
+                  userToken={userToken}
+                  hovered={hoveredCard === artist}
+                  selected={card === artist}
+                  image={
+                    artist._links.thumbnail.href.includes("missing_image.png")
+                      ? artsyLogo
+                      : artist._links.thumbnail.href
+                  }
+                  text={artist.name == undefined ? "" : artist.name}
+                  id={artist.id == undefined ? "" : artist.id}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
