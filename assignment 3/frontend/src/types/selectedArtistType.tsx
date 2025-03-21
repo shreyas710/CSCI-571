@@ -14,8 +14,7 @@ interface SelectedArtist {
   sortable_name: string;
   target_supply: boolean;
   updated_at: string;
-  links: Links;
-  thumbnail: ResourceLink;
+  _links: Links;
   isFavorite?: boolean;
 }
 
@@ -28,6 +27,7 @@ interface Links {
   self: ResourceLink;
   similar_artists: ResourceLink;
   similar_contemporary_artists: ResourceLink;
+  thumbnail: ResourceLink;
 }
 
 interface ResourceLink {

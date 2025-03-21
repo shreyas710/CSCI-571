@@ -10,6 +10,7 @@ import Footer from "./components/footer/footer.tsx";
 import { AuthProvider } from "./context/AuthContext.tsx";
 import { NotificationsProvider } from "./context/NotificationContext.tsx";
 import { FavoritesProvider } from "./context/FavoriteContext.tsx";
+import Favorites from "./components/favorites/favorites.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
@@ -21,6 +22,7 @@ createRoot(document.getElementById("root")!).render(
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
+            <Route path='/favorites' element={<Favorites />} />
             <Route path='*' element={<h1>Not Found</h1>} />
           </Routes>
           <Footer />

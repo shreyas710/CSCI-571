@@ -99,12 +99,12 @@ export default function NavBar() {
             )}
             {isLoggedIn && (
               <div className='me-2'>
-                {currentPath == "/login" ? (
+                {currentPath == "/favorites" ? (
                   <Button style={{ backgroundColor: "rgb(0, 66, 133)" }}>
                     Favorites
                   </Button>
                 ) : (
-                  <Nav.Link as={Link} to='/login' className='fw-medium'>
+                  <Nav.Link as={Link} to='/favorites' className='fw-medium'>
                     Favorites
                   </Nav.Link>
                 )}
