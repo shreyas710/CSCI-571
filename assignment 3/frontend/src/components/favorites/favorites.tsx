@@ -1,3 +1,6 @@
+// TODO 1: Set order of favorites in form of newset first
+// TODO 2: Clicking on favorite artist should redirect to artist page
+
 import { useEffect, useState } from "react";
 import { useFavorites } from "../../context/FavoriteContext";
 import Favorite from "./favorite";
@@ -8,7 +11,7 @@ export default function Favorites() {
   const { favorites } = useFavorites();
 
   const [loader, setLoader] = useState(true);
-  const [artists, setArtists] = useState<FavoriteArtistData[] | null>(null);
+  const [artists, setArtists] = useState<FavoriteArtistData[] | undefined>([]);
 
   const [userToken, setUserToken] = useState<string | null>(null);
 
@@ -29,7 +32,7 @@ export default function Favorites() {
     }
 
     const fetchFavorites = async () => {
-      setArtists(null);
+      setArtists([]);
       for (const favorite of favorites) {
         try {
           const response = await fetch(`/api/artsy/get_artist/${favorite.id}`);
@@ -45,12 +48,12 @@ export default function Favorites() {
                 ]
               : [{ artistDetails: data, favoriteDetails: favorite }]
           );
+          await new Promise((resolve) => setTimeout(resolve, 100));
         } catch (error) {
           console.error(error);
-        } finally {
-          setLoader(false);
         }
       }
+      setLoader(false);
     };
 
     fetchFavorites();
@@ -80,7 +83,9 @@ export default function Favorites() {
   }
 
   return (
-    <div className='container-fluid w-50 mt-5'>
+    <div
+      className='container mt-5'
+      style={{ maxWidth: "75%", marginBottom: "50px" }}>
       {artists.map((artist) => (
         <Favorite
           key={artist.favoriteDetails.id}
