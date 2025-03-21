@@ -7,10 +7,13 @@ import { Button } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useNotifications } from "../../context/NotificationContext";
+import { useNavigate } from "react-router-dom";
+
 
 export default function NavBar() {
   const location = useLocation();
   const currentPath = location.pathname;
+  const navigate = useNavigate();
 
   const { user, isLoggedIn, logout, setUser } = useAuth();
 
@@ -42,6 +45,7 @@ export default function NavBar() {
           },
         ]);
         deleteCookie("userToken");
+        navigate("/");
       } else {
         console.log("Failed to delete user");
       }
@@ -152,6 +156,7 @@ export default function NavBar() {
                         },
                       ]);
                       deleteCookie("userToken");
+                      navigate("/");
                     }}>
                     Log out
                   </NavDropdown.Item>
