@@ -74,11 +74,11 @@ export default function StarElement({
       console.log(favouriteArtists);
       // @ts-expect-error favouriteArtists is of any type
       setFavouriteArtists((favouriteArtists) => [
-        ...favouriteArtists!,
         {
           artistDetails: data,
           favoriteDetails: { id: favorite.id, createdAt: favorite.createdAt },
         },
+        ...favouriteArtists!,
       ]);
     } catch (error) {
       console.error("Fetch favorite artists failed:", error);
@@ -111,7 +111,7 @@ export default function StarElement({
         {
           message: `Added to favorites`,
           textColor: "text-success",
-          backgroundColor: "rgb(214, 249, 210)",
+          backgroundColor: "rgb(203,226,216)",
           show: true,
         },
       ]);

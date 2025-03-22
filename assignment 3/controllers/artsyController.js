@@ -19,7 +19,6 @@ const generateToken = async (req, res) => {
             console.log("Token generated");
             res.json({ "message": "Token generated" });
         } else {
-            console.log("Token already present");
             res.json({ "message": "Token already present" });
         }
     } catch (error) {

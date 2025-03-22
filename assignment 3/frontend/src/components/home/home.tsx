@@ -52,6 +52,8 @@ export default function Home() {
 
   useEffect(() => {
     if (artistId) {
+      setSelectedArtist(null);
+
       const fetchArtistById = async () => {
         try {
           const response = await fetch(`/api/artsy/get_artist/${artistId}`);
@@ -60,12 +62,13 @@ export default function Home() {
           localStorage.setItem("selectedArtist", JSON.stringify(data));
         } catch (error) {
           console.error(error);
+        } finally {
+          setFetchArtistLoader(false);
         }
       };
 
       setFetchArtistLoader(true);
       fetchArtistById();
-      setFetchArtistLoader(false);
     }
 
     const cookies = document.cookie.split(";");

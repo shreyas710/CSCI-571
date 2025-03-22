@@ -4,12 +4,15 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useFavorites } from "../../context/FavoriteContext";
+import { useNotifications } from "../../context/NotificationContext";
 
 export default function Login() {
   const navigate = useNavigate();
 
   const { login, setUser } = useAuth();
   const { setFavorites } = useFavorites();
+
+  const {setNotifications} = useNotifications();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,7 +27,7 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Login attempt with:", { email, password });
-
+    setNotifications([]);
     setLoggedInLoader(true);
     try {
       const response = await fetch(`/api/users/login`, {

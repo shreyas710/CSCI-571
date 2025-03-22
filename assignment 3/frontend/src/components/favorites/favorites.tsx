@@ -1,5 +1,3 @@
-// TODO 1: Set order of favorites in form of newset first
-
 import { useEffect, useState } from "react";
 import { useFavorites } from "../../context/FavoriteContext";
 import Favorite from "./favorite";
@@ -41,11 +39,11 @@ export default function Favorites() {
           const data = await response.json();
           // @ts-expect-error favouriteArtists is of any type
           setFavouriteArtists((favouriteArtists) => [
-            ...favouriteArtists!,
             {
               artistDetails: data,
               favoriteDetails: favorite,
             },
+            ...favouriteArtists!,
           ]);
           await new Promise((resolve) => setTimeout(resolve, 100));
         } catch (error) {
