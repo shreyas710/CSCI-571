@@ -1,9 +1,15 @@
 import { Card } from "react-bootstrap";
 import Artwork from "../../types/artworkType";
 import artsyLogo from "../../assets/images/artsy_logo.svg";
+import "./artwork.css";
+import { useState } from "react";
+import GenesModel from "../artworkGenes/genesModel";
+import GeneCategory from "../../types/geneType";
 
 const ArtworkCard = ({ artwork }: { artwork: Artwork }) => {
   let thumbnailUrl;
+  const [loader, setLoader] = useState(true);
+  const [genes, setGenes] = useState<GeneCategory[]>([]);
 
   if (
     !artwork._links ||
@@ -15,6 +21,25 @@ const ArtworkCard = ({ artwork }: { artwork: Artwork }) => {
   } else {
     thumbnailUrl = artwork._links.thumbnail.href;
   }
+
+  const [show, setShow] = useState(false);
+
+  const fetchGenes = async () => {
+    try {
+      const response = await fetch(`/api/artsy/get_artist_genes/${artwork.id}`);
+      const data = await response.json();
+      setGenes(data);
+    } catch (error) {
+      console.error(error);
+    }
+    setLoader(false);
+  };
+
+  const handleClose = () => setShow(false);
+  const handleShow = async () => {
+    setShow(true);
+    await fetchGenes();
+  };
 
   return (
     <Card
@@ -37,10 +62,19 @@ const ArtworkCard = ({ artwork }: { artwork: Artwork }) => {
         </Card.Title>
       </Card.Body>
       <Card.Footer
-        className='text-muted'
-        style={{ cursor: "pointer", textAlign: "center" }}>
+        className='text-muted cardFooter'
+        style={{ cursor: "pointer", textAlign: "center" }}
+        onClick={handleShow}>
         <small>View Categories</small>
       </Card.Footer>
+      <GenesModel
+        show={show}
+        handleClose={handleClose}
+        artwork={artwork}
+        thumbnailUrl={thumbnailUrl}
+        loader={loader}
+        genes={genes}
+      />
     </Card>
   );
 };

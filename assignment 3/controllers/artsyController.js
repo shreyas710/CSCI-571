@@ -95,7 +95,7 @@ const getArtistArtworks = async (req, res) => {
     }
 }
 
-// get genes for artist
+// get genes for artwork
 const getArtistGenes = async (req, res) => {
     try {
         const token = req.cookies.token;
@@ -106,7 +106,7 @@ const getArtistGenes = async (req, res) => {
         if (id === undefined) {
             res.json({ "message": "Please provide an id" });
         }
-        const response = await axios.get(BASE_URL + '/genes?artist_id=' + id, {
+        const response = await axios.get(BASE_URL + '/genes?artwork_id=' + id, {
             headers: {
                 'X-Xapp-Token': token
             }
