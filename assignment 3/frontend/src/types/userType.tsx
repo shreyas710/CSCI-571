@@ -4,7 +4,7 @@ interface User {
   token: string;
   pic: string;
   _id: string;
-  favorites: {id: string, timeCreated: string}[];
+  favorites: { id: string; createdAt: Date }[];
 }
 
 export default User;

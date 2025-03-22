@@ -13,6 +13,7 @@ import { useAuth } from "../../context/AuthContext";
 import StackingExample from "../notifications/notifications";
 import { useNotifications } from "../../context/NotificationContext";
 import { useFavorites } from "../../context/FavoriteContext";
+import { useSearchParams } from "react-router-dom";
 
 export default function Home() {
   const [search, setSearch] = useState<string>("");
@@ -46,7 +47,27 @@ export default function Home() {
 
   const { isLoggedIn, login, setUser } = useAuth();
 
+  const [searchParams] = useSearchParams();
+  const artistId = searchParams.get("artistId");
+
   useEffect(() => {
+    if (artistId) {
+      const fetchArtistById = async () => {
+        try {
+          const response = await fetch(`/api/artsy/get_artist/${artistId}`);
+          const data = await response.json();
+          setSelectedArtist(data);
+          localStorage.setItem("selectedArtist", JSON.stringify(data));
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      setFetchArtistLoader(true);
+      fetchArtistById();
+      setFetchArtistLoader(false);
+    }
+
     const cookies = document.cookie.split(";");
     if (cookies.length > 0) {
       cookies.forEach((cookie) => {

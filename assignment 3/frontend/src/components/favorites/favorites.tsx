@@ -1,17 +1,20 @@
 // TODO 1: Set order of favorites in form of newset first
-// TODO 2: Clicking on favorite artist should redirect to artist page
 
 import { useEffect, useState } from "react";
 import { useFavorites } from "../../context/FavoriteContext";
 import Favorite from "./favorite";
 import { Spinner } from "react-bootstrap";
-import FavoriteArtistData from "../../types/favoriteArtistType";
+import { useNavigate, createSearchParams } from "react-router-dom";
+import { useFavoriteArtists } from "../../context/FavoriteArtistContext";
 
 export default function Favorites() {
+  const navigate = useNavigate();
+
   const { favorites } = useFavorites();
 
   const [loader, setLoader] = useState(true);
-  const [artists, setArtists] = useState<FavoriteArtistData[] | undefined>([]);
+
+  const { favouriteArtists, setFavouriteArtists } = useFavoriteArtists();
 
   const [userToken, setUserToken] = useState<string | null>(null);
 
@@ -32,22 +35,18 @@ export default function Favorites() {
     }
 
     const fetchFavorites = async () => {
-      setArtists([]);
       for (const favorite of favorites) {
         try {
           const response = await fetch(`/api/artsy/get_artist/${favorite.id}`);
           const data = await response.json();
-          setArtists((artists) =>
-            artists
-              ? [
-                  ...artists,
-                  {
-                    artistDetails: data,
-                    favoriteDetails: favorite,
-                  },
-                ]
-              : [{ artistDetails: data, favoriteDetails: favorite }]
-          );
+          // @ts-expect-error favouriteArtists is of any type
+          setFavouriteArtists((favouriteArtists) => [
+            ...favouriteArtists!,
+            {
+              artistDetails: data,
+              favoriteDetails: favorite,
+            },
+          ]);
           await new Promise((resolve) => setTimeout(resolve, 100));
         } catch (error) {
           console.error(error);
@@ -56,8 +55,22 @@ export default function Favorites() {
       setLoader(false);
     };
 
-    fetchFavorites();
+    if (favouriteArtists == undefined || !favouriteArtists.length) {
+      console.log("No favorites");
+      fetchFavorites();
+      return;
+    }
+    setLoader(false);
   }, []);
+
+  const handleFavoriteClick = (artistId: string) => {
+    navigate({
+      pathname: "/",
+      search: `?${createSearchParams({
+        artistId,
+      })}`,
+    });
+  };
 
   if (loader) {
     return (
@@ -72,7 +85,7 @@ export default function Favorites() {
     );
   }
 
-  if (!favorites.length || !artists) {
+  if (!favorites.length) {
     return (
       <div className='container-fluid w-50 mt-5'>
         <div className='alert alert-danger text-lg-start mt-3' role='alert'>
@@ -86,13 +99,12 @@ export default function Favorites() {
     <div
       className='container mt-5'
       style={{ maxWidth: "75%", marginBottom: "50px" }}>
-      {artists.map((artist) => (
+      {favouriteArtists!.map((artist) => (
         <Favorite
           key={artist.favoriteDetails.id}
           favoriteArtistData={artist}
           userToken={userToken}
-          artists={artists}
-          setArtists={setArtists}
+          handleFavoriteClick={handleFavoriteClick}
         />
       ))}
     </div>

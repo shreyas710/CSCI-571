@@ -2,6 +2,7 @@ import { Star, StarFill } from "react-bootstrap-icons";
 import { useFavorites } from "../../context/FavoriteContext";
 import { useNotifications } from "../../context/NotificationContext";
 import { useEffect } from "react";
+import { useFavoriteArtists } from "../../context/FavoriteArtistContext";
 
 export default function StarElement({
   toggleFavorite,
@@ -18,6 +19,7 @@ export default function StarElement({
 }) {
   const { favorites, setFavorites } = useFavorites();
   const { notifications, setNotifications } = useNotifications();
+  const { favouriteArtists, setFavouriteArtists } = useFavoriteArtists();
 
   useEffect(() => {
     if (favorites.some((favorite) => favorite.id === id)) {
@@ -61,6 +63,28 @@ export default function StarElement({
     }
   };
 
+  const fetchFavouriteArtist = async (favorite: {
+    id: string;
+    createdAt: Date;
+  }) => {
+    console.log(favorite);
+    try {
+      const response = await fetch(`/api/artsy/get_artist/${favorite.id}`);
+      const data = await response.json();
+      console.log(favouriteArtists);
+      // @ts-expect-error favouriteArtists is of any type
+      setFavouriteArtists((favouriteArtists) => [
+        ...favouriteArtists!,
+        {
+          artistDetails: data,
+          favoriteDetails: { id: favorite.id, createdAt: favorite.createdAt },
+        },
+      ]);
+    } catch (error) {
+      console.error("Fetch favorite artists failed:", error);
+    }
+  };
+
   const handleClick = async (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     e.stopPropagation();
     if (toggleFavorite) {
@@ -75,6 +99,11 @@ export default function StarElement({
         },
       ]);
       setFavorites(favorites.filter((favorite) => favorite.id !== id));
+      setFavouriteArtists(
+        favouriteArtists!.filter(
+          (favoriteArtist) => favoriteArtist.artistDetails.id !== id
+        )
+      );
     } else {
       const data = await addfavoritesToUser();
       setNotifications([
@@ -87,6 +116,12 @@ export default function StarElement({
         },
       ]);
       setFavorites(data);
+      console.log("Data:", data);
+      await fetchFavouriteArtist(
+        data.filter(
+          (favorite: { id: string; createdAt: Date }) => favorite.id === id
+        )[0]
+      );
     }
     setToggleFavorite(!toggleFavorite);
   };

@@ -3,11 +3,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useFavorites } from "../../context/FavoriteContext";
 
 export default function Login() {
   const navigate = useNavigate();
 
   const { login, setUser } = useAuth();
+  const { setFavorites } = useFavorites();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -40,6 +42,7 @@ export default function Login() {
       }
       login();
       setUser(data);
+      setFavorites(data.favorites);
       navigate("/");
     } catch (error) {
       console.error("Login failed:", error);

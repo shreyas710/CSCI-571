@@ -3,19 +3,16 @@ import { Card } from "react-bootstrap";
 import artsyLogo from "../../assets/images/artsy_logo.svg";
 import { useFavorites } from "../../context/FavoriteContext";
 import { useEffect, useState } from "react";
+import { useFavoriteArtists } from "../../context/FavoriteArtistContext";
 
 export default function Favorite({
   favoriteArtistData,
   userToken,
-  artists,
-  setArtists,
+  handleFavoriteClick,
 }: {
   favoriteArtistData: FavoriteArtistData;
   userToken: string | null;
-  artists: FavoriteArtistData[] | null;
-  setArtists: React.Dispatch<
-    React.SetStateAction<FavoriteArtistData[] | undefined>
-  >;
+  handleFavoriteClick: (id: string) => void;
 }) {
   const { favoriteDetails, artistDetails } = favoriteArtistData;
   const { favorites, setFavorites } = useFavorites();
@@ -25,6 +22,8 @@ export default function Favorite({
       ? formatTimeAgo(new Date(favoriteDetails.createdAt))
       : ""
   );
+
+  const { favouriteArtists, setFavouriteArtists } = useFavoriteArtists();
 
   function formatTimeAgo(createdDate: Date) {
     const seconds = Math.floor(
@@ -59,7 +58,10 @@ export default function Favorite({
     return () => clearInterval(timer);
   }, [favoriteDetails.createdAt]);
 
-  const removeFavoriteFromUser = async () => {
+  const removeFavoriteFromUser = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.stopPropagation();
     try {
       const response = await fetch(`/api/users/favorites`, {
         method: "DELETE",
@@ -73,8 +75,8 @@ export default function Favorite({
       setFavorites(
         favorites.filter((favorite) => favorite.id !== favoriteDetails.id)
       );
-      setArtists(
-        artists?.filter(
+      setFavouriteArtists(
+        favouriteArtists?.filter(
           (artist) => artist.favoriteDetails.id !== favoriteDetails.id
         ) || []
       );
@@ -86,6 +88,7 @@ export default function Favorite({
 
   return (
     <Card
+      onClick={() => handleFavoriteClick(artistDetails.id)}
       style={{
         display: "inline-block",
         width: "350px",
@@ -94,6 +97,7 @@ export default function Favorite({
         borderRadius: "8px",
         overflow: "hidden", // This is critical to contain the blur
         position: "relative", // Needed for absolute positioning of children
+        cursor: "pointer",
       }}>
       <Card.Img
         src={
@@ -136,7 +140,7 @@ export default function Favorite({
           flexDirection: "column",
           justifyContent: "flex-start",
         }}>
-        <Card.Title className='mb-2 fs-3 fw-bold'>
+        <Card.Title className='mb-2 fs-4 fw-bold'>
           {artistDetails.name}
         </Card.Title>
         <div
@@ -157,7 +161,7 @@ export default function Favorite({
           </Card.Text>
           <button
             className='btn btn-link text-white text-decoration-none p-0'
-            onClick={removeFavoriteFromUser}>
+            onClick={(e) => removeFavoriteFromUser(e)}>
             <u>Remove</u>
           </button>
         </div>
