@@ -7,13 +7,13 @@ import artsyLogo from "../../assets/images/artsy_logo.svg";
 import "./home.css";
 import ArtistDetails from "../artistDetails/artistDetails";
 import Tab from "react-bootstrap/Tab";
-import Artwork from "../../types/artworkType";
 import ArtistArtworks from "../artistArtworks/artistArtworks";
 import { useAuth } from "../../context/AuthContext";
 import StackingExample from "../notifications/notifications";
 import { useNotifications } from "../../context/NotificationContext";
 import { useFavorites } from "../../context/FavoriteContext";
 import { useSearchParams } from "react-router-dom";
+import { useArtworks } from "../../context/ArtworkContext";
 
 export default function Home() {
   const [search, setSearch] = useState<string>("");
@@ -27,7 +27,8 @@ export default function Home() {
     null
   );
 
-  const [artworks, setArtworks] = useState<Artwork[]>([]);
+  const { artworks, setArtworks } = useArtworks();
+
   const [fetchArtworksLoader, setFetchArtworksLoader] =
     useState<boolean>(false);
 
@@ -53,6 +54,7 @@ export default function Home() {
   useEffect(() => {
     if (artistId) {
       setSelectedArtist(null);
+      setArtworks([]);
 
       const fetchArtistById = async () => {
         try {
@@ -139,6 +141,7 @@ export default function Home() {
     setAlert(null);
     setSelectedArtist(null);
     setSimilarArtists([]);
+    setArtworks([]);
     localStorage.clear();
     try {
       const response = await fetch(`/api/artsy/search_artist/${search}`);
@@ -159,6 +162,7 @@ export default function Home() {
     setSelectedArtist(null);
     setFetchArtistLoader(true);
     setArtworkAlert(null);
+    setArtworks([]);
     if (!similarCard) setSimilarArtists([]);
     try {
       const response = await fetch(
@@ -191,7 +195,6 @@ export default function Home() {
   }
 
   async function fetchArtworks() {
-    setArtworks([]);
     setFetchArtworksLoader(true);
     setArtworkAlert(null);
     try {
@@ -311,7 +314,13 @@ export default function Home() {
                 <Nav.Link eventKey='first'>Artist Info</Nav.Link>
               </Nav.Item>
               <Nav.Item style={{ width: "49%" }}>
-                <Nav.Link eventKey='second' onClick={() => fetchArtworks()}>
+                <Nav.Link
+                  eventKey='second'
+                  onClick={() => {
+                    if (artworks.length === 0) {
+                      fetchArtworks();
+                    }
+                  }}>
                   Artworks
                 </Nav.Link>
               </Nav.Item>

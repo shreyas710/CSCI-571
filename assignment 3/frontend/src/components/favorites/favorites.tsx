@@ -54,7 +54,6 @@ export default function Favorites() {
     };
 
     if (favouriteArtists == undefined || !favouriteArtists.length) {
-      console.log("No favorites");
       fetchFavorites();
       return;
     }

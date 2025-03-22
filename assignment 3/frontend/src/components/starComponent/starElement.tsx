@@ -67,11 +67,9 @@ export default function StarElement({
     id: string;
     createdAt: Date;
   }) => {
-    console.log(favorite);
     try {
       const response = await fetch(`/api/artsy/get_artist/${favorite.id}`);
       const data = await response.json();
-      console.log(favouriteArtists);
       // @ts-expect-error favouriteArtists is of any type
       setFavouriteArtists((favouriteArtists) => [
         {
@@ -116,7 +114,6 @@ export default function StarElement({
         },
       ]);
       setFavorites(data);
-      console.log("Data:", data);
       await fetchFavouriteArtist(
         data.filter(
           (favorite: { id: string; createdAt: Date }) => favorite.id === id

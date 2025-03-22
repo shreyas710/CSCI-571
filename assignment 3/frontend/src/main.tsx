@@ -12,6 +12,7 @@ import { NotificationsProvider } from "./context/NotificationContext.tsx";
 import { FavoritesProvider } from "./context/FavoriteContext.tsx";
 import Favorites from "./components/favorites/favorites.tsx";
 import { FavoriteArtistsProvider } from "./context/FavoriteArtistContext.tsx";
+import { ArtworksProvider } from "./context/ArtworkContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
@@ -19,15 +20,17 @@ createRoot(document.getElementById("root")!).render(
       <NotificationsProvider>
         <FavoritesProvider>
           <FavoriteArtistsProvider>
-            <NavBar />
-            <Routes>
-              <Route path='/' element={<Home />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/register' element={<Register />} />
-              <Route path='/favorites' element={<Favorites />} />
-              <Route path='*' element={<h1>Not Found</h1>} />
-            </Routes>
-            <Footer />
+            <ArtworksProvider>
+              <NavBar />
+              <Routes>
+                <Route path='/' element={<Home />} />
+                <Route path='/login' element={<Login />} />
+                <Route path='/register' element={<Register />} />
+                <Route path='/favorites' element={<Favorites />} />
+                <Route path='*' element={<h1>Not Found</h1>} />
+              </Routes>
+              <Footer />
+            </ArtworksProvider>
           </FavoriteArtistsProvider>
         </FavoritesProvider>
       </NotificationsProvider>
