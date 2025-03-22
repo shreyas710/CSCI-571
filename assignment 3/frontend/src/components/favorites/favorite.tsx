@@ -95,8 +95,8 @@ export default function Favorite({
         height: "200px",
         margin: "10px",
         borderRadius: "8px",
-        overflow: "hidden", // This is critical to contain the blur
-        position: "relative", // Needed for absolute positioning of children
+        overflow: "hidden",
+        position: "relative",
         cursor: "pointer",
       }}>
       <Card.Img
