@@ -1,12 +1,12 @@
 import Artwork from "../../types/artworkType";
+import ArtworkCard from "./artwork";
 
 export default function ArtistArtworks({ artworks }: { artworks: Artwork[] }) {
-  return artworks.map((artwork) => (
-    <div key={artwork.id} className='mt-3'>
-      <div className='text-center'>
-        <h2 className='font-bold m-0'>{artwork.title}</h2>
-        <p className='text-lg text-gray-600'>{artwork.date}</p>
-      </div>
+  return (
+    <div className="mt-5" style={{textAlign: "left", display: "flex", flexWrap: "wrap", alignItems: "start"}}>
+      {artworks.map((artwork) => (
+        <ArtworkCard key={artwork.id} artwork={artwork} />
+      ))}
     </div>
-  ));
+  );
 }
