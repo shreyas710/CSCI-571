@@ -126,14 +126,14 @@ export default function StarElement({
   return toggleFavorite ? (
     <StarFill
       onClick={handleClick}
-      className={!isCard ? "ms-1 pb-2" : "pt-1"}
+      className={!isCard ? "ms-1 pb-2" : "pt-1 ms-1"}
       style={{ color: "gold", cursor: "pointer" }}
       size={isCard ? 25 : 30}
     />
   ) : (
     <Star
       onClick={handleClick}
-      className={!isCard ? "ms-1 pb-2" : "pt-1"}
+      className={!isCard ? "ms-1 pb-2" : "pt-1 ms-1"}
       style={{
         color: `${isCard ? "white" : "black"}`,
         cursor: "pointer",

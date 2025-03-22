@@ -259,7 +259,7 @@ export default function Home() {
       {artists.length > 0 && (
         <div
           className='mt-3 overflow-auto home-artist-card'
-          style={{ whiteSpace: "nowrap" }}>
+          style={{ whiteSpace: "nowrap", textAlign: "left" }}>
           {artists.map((artist, index) => (
             <div
               onMouseEnter={() => setHoveredCard(artist)}
@@ -363,7 +363,7 @@ export default function Home() {
       )}
 
       {isLoggedIn && similarArtists.length > 0 && (
-        <div>
+        <div style={{ textAlign: "left" }}>
           <h3 className='text-start'>Similar Artists</h3>
           <div
             className='mt-3 overflow-auto home-artist-card'
