@@ -92,6 +92,16 @@ export default function Favorites() {
         <div className='alert alert-danger text-lg-start mt-3' role='alert'>
           No favorite artists.
         </div>
+        <div
+          style={{
+            position: "fixed",
+            top: "80px",
+            right: "10px",
+            width: "300px",
+            zIndex: 100,
+          }}>
+          <StackingExample notifications={notifications} />
+        </div>
       </div>
     );
   }
