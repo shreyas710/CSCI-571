@@ -4,6 +4,9 @@ import Favorite from "./favorite";
 import { Spinner } from "react-bootstrap";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import { useFavoriteArtists } from "../../context/FavoriteArtistContext";
+import './favorite.css';
+import StackingExample from "../notifications/notifications";
+import { useNotifications } from "../../context/NotificationContext";
 
 export default function Favorites() {
   const navigate = useNavigate();
@@ -13,6 +16,7 @@ export default function Favorites() {
   const [loader, setLoader] = useState(true);
 
   const { favouriteArtists, setFavouriteArtists } = useFavoriteArtists();
+  const { notifications } = useNotifications();
 
   const [userToken, setUserToken] = useState<string | null>(null);
 
@@ -94,8 +98,8 @@ export default function Favorites() {
 
   return (
     <div
-      className='container mt-5'
-      style={{ maxWidth: "75%", marginBottom: "50px" }}>
+      className='container mt-5 favoriteList'
+      style={{ width: "100%", marginBottom: "50px" }}>
       {favouriteArtists!.map((artist) => (
         <Favorite
           key={artist.favoriteDetails.id}
@@ -104,6 +108,16 @@ export default function Favorites() {
           handleFavoriteClick={handleFavoriteClick}
         />
       ))}
+      <div
+        style={{
+          position: "fixed",
+          top: "80px",
+          right: "10px",
+          width: "300px",
+          zIndex: 100,
+        }}>
+        <StackingExample notifications={notifications} />
+      </div>
     </div>
   );
 }

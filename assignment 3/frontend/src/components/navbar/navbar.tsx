@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useNotifications } from "../../context/NotificationContext";
 import { useNavigate } from "react-router-dom";
+import './navbar.css'
 
 export default function NavBar() {
   const location = useLocation();
@@ -150,7 +151,7 @@ export default function NavBar() {
               </div>
             )}
             {isLoggedIn && (
-              <div style={{ margin: "auto" }}>
+              <div style={{ marginLeft: "10px", marginRight: `${user!.name.length < 8 ? "50px" : "0px"}` }} className="navbarDropdown">
                 <NavDropdown
                   title={
                     <>

@@ -4,7 +4,8 @@ import artsyLogo from "../../assets/images/artsy_logo.svg";
 import { useFavorites } from "../../context/FavoriteContext";
 import { useEffect, useState } from "react";
 import { useFavoriteArtists } from "../../context/FavoriteArtistContext";
-
+import "./favorite.css";
+import { useNotifications } from "../../context/NotificationContext";
 export default function Favorite({
   favoriteArtistData,
   userToken,
@@ -16,6 +17,7 @@ export default function Favorite({
 }) {
   const { favoriteDetails, artistDetails } = favoriteArtistData;
   const { favorites, setFavorites } = useFavorites();
+  const { notifications, setNotifications } = useNotifications();
 
   const [timeAgo, setTimeAgo] = useState(
     favoriteDetails.createdAt
@@ -72,6 +74,15 @@ export default function Favorite({
         body: JSON.stringify({ id: favoriteDetails.id }),
       });
       const data = await response.json();
+      setNotifications([
+        ...notifications,
+        {
+          message: `Removed from favorites`,
+          textColor: "text-danger",
+          backgroundColor: "rgb(249, 210, 214)",
+          show: true,
+        },
+      ]);
       setFavorites(
         favorites.filter((favorite) => favorite.id !== favoriteDetails.id)
       );
@@ -91,14 +102,15 @@ export default function Favorite({
       onClick={() => handleFavoriteClick(artistDetails.id)}
       style={{
         display: "inline-block",
-        width: "350px",
-        height: "200px",
-        margin: "10px",
+        width: "400px",
+        height: "250px",
         borderRadius: "8px",
         overflow: "hidden",
         position: "relative",
         cursor: "pointer",
-      }}>
+        margin: "10px",
+      }}
+      className='favoriteCard'>
       <Card.Img
         src={
           !artistDetails._links ||

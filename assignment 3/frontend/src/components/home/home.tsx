@@ -399,6 +399,7 @@ export default function Home() {
           top: "80px",
           right: "10px",
           width: "300px",
+          zIndex: 100,
         }}>
         <StackingExample notifications={notifications} />
       </div>
