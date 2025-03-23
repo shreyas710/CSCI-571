@@ -84,7 +84,7 @@ export default function Favorites() {
 
   if (!favorites.length) {
     return (
-      <div className='container-fluid w-50 mt-5'>
+      <div className='container mt-5'>
         <div className='alert alert-danger text-lg-start mt-3' role='alert'>
           No favorite artists.
         </div>

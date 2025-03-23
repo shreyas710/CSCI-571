@@ -43,7 +43,7 @@ const ArtworkCard = ({ artwork }: { artwork: Artwork }) => {
 
   return (
     <Card
-      className='shadow-sm mb-4'
+      className='shadow-sm mb-4 artworkCard'
       style={{
         width: "304px",
         display: "inline-block",

@@ -2,3 +2,18 @@
     color: white !important;
     background-color: rgb(12, 55, 108);
 }
+
+@media (max-width: 768px) {
+    .artworkList {
+        justify-content: center !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .artworkList {
+        justify-content: center !important;
+    }
+    .artworkCard {
+        width: 100% !important;
+    }
+}

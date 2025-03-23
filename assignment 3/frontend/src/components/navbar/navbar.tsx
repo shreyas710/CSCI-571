@@ -9,7 +9,6 @@ import { useAuth } from "../../context/AuthContext";
 import { useNotifications } from "../../context/NotificationContext";
 import { useNavigate } from "react-router-dom";
 
-
 export default function NavBar() {
   const location = useLocation();
   const currentPath = location.pathname;
@@ -66,11 +65,20 @@ export default function NavBar() {
           <Nav navbarScroll>
             <div className='me-4'>
               {currentPath == "/" ? (
-                <Button style={{ backgroundColor: "rgb(0, 66, 133)" }}>
+                <Button
+                  style={{
+                    backgroundColor: "rgb(0, 66, 133)",
+                    width: "100%",
+                    textAlign: "left",
+                  }}>
                   Search
                 </Button>
               ) : (
-                <Nav.Link as={Link} to='/' className='fw-medium'>
+                <Nav.Link
+                  as={Link}
+                  to='/'
+                  className='fw-medium'
+                  style={{ marginLeft: "10px" }}>
                   Search
                 </Nav.Link>
               )}
@@ -78,11 +86,20 @@ export default function NavBar() {
             {!isLoggedIn && (
               <div className='me-4'>
                 {currentPath == "/login" ? (
-                  <Button style={{ backgroundColor: "rgb(0, 66, 133)" }}>
+                  <Button
+                    style={{
+                      backgroundColor: "rgb(0, 66, 133)",
+                      width: "100%",
+                      textAlign: "left",
+                    }}>
                     Log in
                   </Button>
                 ) : (
-                  <Nav.Link as={Link} to='/login' className='fw-medium'>
+                  <Nav.Link
+                    as={Link}
+                    to='/login'
+                    className='fw-medium'
+                    style={{ marginLeft: "10px" }}>
                     Log in
                   </Nav.Link>
                 )}
@@ -91,11 +108,20 @@ export default function NavBar() {
             {!isLoggedIn && (
               <div className='me-4'>
                 {currentPath == "/register" ? (
-                  <Button style={{ backgroundColor: "rgb(0, 66, 133)" }}>
+                  <Button
+                    style={{
+                      backgroundColor: "rgb(0, 66, 133)",
+                      width: "100%",
+                      textAlign: "left",
+                    }}>
                     Register
                   </Button>
                 ) : (
-                  <Nav.Link as={Link} to='/register' className='fw-medium'>
+                  <Nav.Link
+                    as={Link}
+                    to='/register'
+                    className='fw-medium'
+                    style={{ marginLeft: "10px" }}>
                     Register
                   </Nav.Link>
                 )}
@@ -104,18 +130,27 @@ export default function NavBar() {
             {isLoggedIn && (
               <div className='me-2'>
                 {currentPath == "/favorites" ? (
-                  <Button style={{ backgroundColor: "rgb(0, 66, 133)" }}>
+                  <Button
+                    style={{
+                      backgroundColor: "rgb(0, 66, 133)",
+                      width: "100%",
+                      textAlign: "left",
+                    }}>
                     Favorites
                   </Button>
                 ) : (
-                  <Nav.Link as={Link} to='/favorites' className='fw-medium'>
+                  <Nav.Link
+                    as={Link}
+                    to='/favorites'
+                    className='fw-medium'
+                    style={{ marginLeft: "10px" }}>
                     Favorites
                   </Nav.Link>
                 )}
               </div>
             )}
             {isLoggedIn && (
-              <div className='me-4'>
+              <div style={{ margin: "auto" }}>
                 <NavDropdown
                   title={
                     <>
