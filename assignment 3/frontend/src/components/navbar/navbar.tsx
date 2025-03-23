@@ -129,7 +129,7 @@ export default function NavBar() {
               </div>
             )}
             {isLoggedIn && (
-              <div className='me-2'>
+              <div className='me-4'>
                 {currentPath == "/favorites" ? (
                   <Button
                     style={{

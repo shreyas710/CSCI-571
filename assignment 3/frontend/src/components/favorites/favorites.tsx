@@ -4,7 +4,7 @@ import Favorite from "./favorite";
 import { Spinner } from "react-bootstrap";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import { useFavoriteArtists } from "../../context/FavoriteArtistContext";
-import './favorite.css';
+import "./favorite.css";
 import StackingExample from "../notifications/notifications";
 import { useNotifications } from "../../context/NotificationContext";
 
@@ -109,7 +109,7 @@ export default function Favorites() {
   return (
     <div
       className='container mt-5 favoriteList'
-      style={{ width: "100%", marginBottom: "50px" }}>
+      style={{ maxWidth: "1300px", marginBottom: "50px" }}>
       {favouriteArtists!.map((artist) => (
         <Favorite
           key={artist.favoriteDetails.id}

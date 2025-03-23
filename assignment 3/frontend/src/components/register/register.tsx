@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useNotifications } from "../../context/NotificationContext";
 
 export default function Register() {
   const { setUser, login } = useAuth();
@@ -17,12 +18,14 @@ export default function Register() {
   const [errorPassword, setErrorPassword] = useState("");
 
   const [loggedInLoader, setLoggedInLoader] = useState(false);
+  const { setNotifications } = useNotifications();
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Register attempt with:", { name, email, password });
+    setNotifications([]);
     setLoggedInLoader(true);
     try {
       const response = await fetch(`/api/users`, {

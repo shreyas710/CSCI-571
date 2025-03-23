@@ -19,7 +19,7 @@ export default function GenesModel({
   genes: GeneCategory[];
 }) {
   return (
-    <Modal size='xl' show={show} onHide={handleClose} centered>
+    <Modal size='xl' show={show} onHide={handleClose}>
       <Modal.Header closeButton>
         <img src={thumbnailUrl} alt='artwork image' height={"70px"} />
         <div

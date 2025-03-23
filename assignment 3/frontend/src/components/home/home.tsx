@@ -87,8 +87,12 @@ export default function Home() {
     }
 
     const selectedArtist = localStorage.getItem("selectedArtist");
+    const similarArtists = localStorage.getItem("similarArtists");
     if (selectedArtist) {
       setSelectedArtist(JSON.parse(selectedArtist));
+    }
+    if (similarArtists) {
+      setSimilarArtists(JSON.parse(similarArtists));
     }
 
     const fetchToken = async () => {
@@ -157,13 +161,13 @@ export default function Home() {
     }
   }
 
-  async function fetchArtist(artist: Artist, similarCard: boolean) {
+  async function fetchArtist(artist: Artist) {
     setCard(artist);
     setSelectedArtist(null);
     setFetchArtistLoader(true);
     setArtworkAlert(null);
     setArtworks([]);
-    if (!similarCard) setSimilarArtists([]);
+    setSimilarArtists([]);
     try {
       const response = await fetch(
         `/api/artsy/get_artist/${
@@ -176,7 +180,7 @@ export default function Home() {
       setSelectedArtist(data);
       localStorage.setItem("selectedArtist", JSON.stringify(data));
 
-      if (isLoggedIn && !similarCard) {
+      if (isLoggedIn) {
         const responseSimilar = await fetch(
           `/api/artsy/get_similar_artists/${
             artist._links.self.href.split("/")[
@@ -186,6 +190,7 @@ export default function Home() {
         );
         const dataSimilar = await responseSimilar.json();
         setSimilarArtists(dataSimilar);
+        localStorage.setItem("similarArtists", JSON.stringify(dataSimilar));
       }
     } catch (error) {
       console.error(error);
@@ -238,7 +243,18 @@ export default function Home() {
           </Button>
           <Button
             variant='secondary'
-            disabled={search == "" ? true : false}
+            disabled={
+              search != "" ||
+              artists.length > 0 ||
+              selectedArtist != null ||
+              card != null ||
+              artworks.length > 0 ||
+              similarArtists.length > 0 ||
+              alert != null ||
+              artworkAlert != null
+                ? false
+                : true
+            }
             onClick={() => {
               setArtists([]);
               setSelectedArtist(null);
@@ -246,9 +262,9 @@ export default function Home() {
               setArtworks([]);
               setSearch("");
               setAlert(null);
-              setAlert(null);
               setArtworkAlert(null);
               setSimilarArtists([]);
+              localStorage.clear();
             }}
             style={{ borderRadius: "0 5px 5px 0" }}>
             Clear
@@ -264,7 +280,7 @@ export default function Home() {
             <div
               onMouseEnter={() => setHoveredCard(artist)}
               onMouseLeave={() => setHoveredCard(null)}
-              onClick={() => fetchArtist(artist, false)}
+              onClick={() => fetchArtist(artist)}
               key={index}
               className='d-inline-block me-3'>
               <ArtistCard
@@ -372,7 +388,7 @@ export default function Home() {
               <div
                 onMouseEnter={() => setHoveredCard(artist)}
                 onMouseLeave={() => setHoveredCard(null)}
-                onClick={() => fetchArtist(artist, true)}
+                onClick={() => fetchArtist(artist)}
                 key={index}
                 className='d-inline-block me-3'>
                 <ArtistCard
