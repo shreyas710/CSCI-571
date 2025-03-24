@@ -143,8 +143,6 @@ export default function Home() {
     setLoading(true);
     setArtworkAlert(null);
     setAlert(null);
-    setSelectedArtist(null);
-    setSimilarArtists([]);
     setArtworks([]);
     localStorage.clear();
     try {

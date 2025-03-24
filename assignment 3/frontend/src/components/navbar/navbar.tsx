@@ -64,7 +64,7 @@ export default function NavBar() {
         <Navbar.Collapse id='navbarScroll'>
           <Nav className='me-auto my-2 my-lg-0' navbarScroll></Nav>
           <Nav navbarScroll>
-            <div className='me-4'>
+            <div className='me-4 mt-1'>
               {currentPath == "/" ? (
                 <Button
                   style={{
@@ -85,7 +85,7 @@ export default function NavBar() {
               )}
             </div>
             {!isLoggedIn && (
-              <div className='me-4'>
+              <div className='me-4 mt-1'>
                 {currentPath == "/login" ? (
                   <Button
                     style={{
@@ -107,7 +107,7 @@ export default function NavBar() {
               </div>
             )}
             {!isLoggedIn && (
-              <div className='me-4'>
+              <div className='me-4 mt-1'>
                 {currentPath == "/register" ? (
                   <Button
                     style={{
@@ -129,7 +129,7 @@ export default function NavBar() {
               </div>
             )}
             {isLoggedIn && (
-              <div className='me-4'>
+              <div className='me-4 mt-1'>
                 {currentPath == "/favorites" ? (
                   <Button
                     style={{
@@ -151,7 +151,12 @@ export default function NavBar() {
               </div>
             )}
             {isLoggedIn && (
-              <div style={{ marginLeft: "10px", marginRight: `${user!.name.length < 8 ? "50px" : "0px"}` }} className="navbarDropdown">
+              <div
+                style={{
+                  marginLeft: "10px",
+                  marginRight: `${user!.name.length < 8 ? "50px" : "0px"}`,
+                }}
+                className='navbarDropdown'>
                 <NavDropdown
                   title={
                     <>
