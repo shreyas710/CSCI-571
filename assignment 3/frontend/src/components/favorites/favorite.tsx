@@ -73,7 +73,7 @@ export default function Favorite({
         },
         body: JSON.stringify({ id: favoriteDetails.id }),
       });
-      const data = await response.json();
+      await response.json();
       setNotifications([
         ...notifications,
         {
@@ -91,7 +91,7 @@ export default function Favorite({
           (artist) => artist.favoriteDetails.id !== favoriteDetails.id
         ) || []
       );
-      console.log("Remove favorite response:", data);
+      console.log("Removed favorite:");
     } catch (error) {
       console.error("Remove favorite failed:", error);
     }

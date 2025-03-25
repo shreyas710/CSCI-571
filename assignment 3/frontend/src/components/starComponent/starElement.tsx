@@ -56,8 +56,8 @@ export default function StarElement({
         },
         body: JSON.stringify({ id }),
       });
-      const data = await response.json();
-      console.log("Remove favorite response:", data);
+      await response.json();
+      console.log("Removed favorite");
     } catch (error) {
       console.error("Remove favorite failed:", error);
     }

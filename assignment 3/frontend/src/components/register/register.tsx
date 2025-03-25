@@ -36,7 +36,7 @@ export default function Register() {
         body: JSON.stringify({ name, email, password }),
       });
       const data = await response.json();
-      console.log("Register response:", data);
+      console.log("Registered");
       if (response.status === 401) {
         setErrorEmail(data.message);
         return;

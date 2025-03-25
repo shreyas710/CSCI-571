@@ -12,7 +12,7 @@ export default function Login() {
   const { login, setUser } = useAuth();
   const { setFavorites } = useFavorites();
 
-  const {setNotifications} = useNotifications();
+  const { setNotifications } = useNotifications();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,7 +38,7 @@ export default function Login() {
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
-      console.log("Login response:", data);
+      console.log("Logged in");
       if (response.status === 401) {
         setErrorPassword(data.message);
         return;
